@@ -1,0 +1,200 @@
+{
+    "spazz": {
+        "controlledMovements": 1,
+        "controlledSubmissions": 1,
+        "modularIntensity": 1,
+        "depthOfKnowledge": 2,
+        "injuryKnowledge": 2,
+        "specificWork": 3,
+        "controlledEgo": 2,
+        "friendlyAttitude": 7,
+        "rdMindset": 4,
+        "notOvertalking": 7,
+        "communicative": 5,
+        "feedbackReceptivity": 5,
+        "safetyConsciousness": 2,
+        "recoveryAwareness": 3,
+        "identifyWeaknesses": 3,
+        "reliability": 6,
+        "strength": 6,
+        "gripStrength": 4,
+        "flexibility": 5,
+        "mobility": 5,
+        "weight": 5,
+        "cardio": 4,
+        "explosiveness": 8,
+        "coordination": 3,
+        "reactionTime": 4,
+        "constitution": 5,
+        "hygiene": 6,
+        "metadata": {
+            "description": "High intensity, low control partner, typically a newer white belt",
+            "strengths": [
+                "Enthusiasm",
+                "Natural athleticism"
+            ],
+            "areas_for_improvement": [
+                "Control",
+                "Technical knowledge"
+            ]
+        }
+    },
+    "brute": {
+        "controlledMovements": 2,
+        "controlledSubmissions": 2,
+        "modularIntensity": 2,
+        "depthOfKnowledge": 2,
+        "injuryKnowledge": 2,
+        "specificWork": 2,
+        "controlledEgo": 2,
+        "friendlyAttitude": 5,
+        "rdMindset": 2,
+        "notOvertalking": 8,
+        "communicative": 2,
+        "feedbackReceptivity": 3,
+        "safetyConsciousness": 1,
+        "recoveryAwareness": 1,
+        "identifyWeaknesses": 1,
+        "reliability": 7,
+        "strength": 9,
+        "gripStrength": 9,
+        "flexibility": 3,
+        "mobility": 4,
+        "weight": 9,
+        "cardio": 6,
+        "explosiveness": 8,
+        "coordination": 3,
+        "reactionTime": 5,
+        "constitution": 9,
+        "hygiene": 6,
+        "metadata": {
+            "description": "Strength-reliant partner with a winning mindset",
+            "strengths": [
+                "Physical strength",
+                "Intensity"
+            ],
+            "areas_for_improvement": [
+                "Technical finesse",
+                "Control"
+            ]
+        }
+    },
+    "veteran": {
+        "controlledMovements": 9,
+        "controlledSubmissions": 9,
+        "modularIntensity": 8,
+        "depthOfKnowledge": 9,
+        "injuryKnowledge": 9,
+        "specificWork": 9,
+        "controlledEgo": 8,
+        "friendlyAttitude": 8,
+        "rdMindset": 7,
+        "notOvertalking": 7,
+        "communicative": 7,
+        "feedbackReceptivity": 7,
+        "safetyConsciousness": 9,
+        "recoveryAwareness": 9,
+        "identifyWeaknesses": 8,
+        "reliability": 8,
+        "strength": 5,
+        "gripStrength": 7,
+        "flexibility": 6,
+        "mobility": 5,
+        "weight": 6,
+        "cardio": 5,
+        "explosiveness": 4,
+        "coordination": 8,
+        "reactionTime": 6,
+        "constitution": 5,
+        "hygiene": 9,
+        "metadata": {
+            "description": "Highly technical, safety-conscious veteran practitioner",
+            "strengths": [
+                "Technical precision",
+                "Teaching ability"
+            ],
+            "areas_for_improvement": [
+                "Physical attributes"
+            ]
+        }
+    },
+    "professor": {
+        "controlledMovements": 10,
+        "controlledSubmissions": 10,
+        "modularIntensity": 9,
+        "depthOfKnowledge": 10,
+        "injuryKnowledge": 9,
+        "specificWork": 10,
+        "controlledEgo": 9,
+        "friendlyAttitude": 9,
+        "rdMindset": 9,
+        "notOvertalking": 6,
+        "communicative": 9,
+        "feedbackReceptivity": 8,
+        "safetyConsciousness": 9,
+        "recoveryAwareness": 9,
+        "identifyWeaknesses": 10,
+        "reliability": 9,
+        "strength": 7,
+        "gripStrength": 8,
+        "flexibility": 7,
+        "mobility": 7,
+        "weight": 7,
+        "cardio": 7,
+        "explosiveness": 6,
+        "coordination": 9,
+        "reactionTime": 8,
+        "constitution": 7,
+        "hygiene": 10,
+        "metadata": {
+            "description": "Highly skilled instructor with deep technical knowledge",
+            "strengths": [
+                "Teaching",
+                "Technical mastery"
+            ],
+            "areas_for_improvement": [
+                "Sometimes overexplains"
+            ]
+        }
+    },
+    "competitor": {
+        "controlledMovements": 8,
+        "controlledSubmissions": 8,
+        "modularIntensity": 6,
+        "depthOfKnowledge": 7,
+        "injuryKnowledge": 6,
+        "specificWork": 9,
+        "controlledEgo": 5,
+        "friendlyAttitude": 6,
+        "rdMindset": 8,
+        "notOvertalking": 7,
+        "communicative": 6,
+        "feedbackReceptivity": 7,
+        "safetyConsciousness": 6,
+        "recoveryAwareness": 7,
+        "identifyWeaknesses": 8,
+        "reliability": 8,
+        "strength": 8,
+        "gripStrength": 8,
+        "flexibility": 7,
+        "mobility": 8,
+        "weight": 7,
+        "cardio": 9,
+        "explosiveness": 8,
+        "coordination": 8,
+        "reactionTime": 8,
+        "constitution": 8,
+        "hygiene": 8,
+        "metadata": {
+            "description": "Competition-focused practitioner with specialized game",
+            "strengths": [
+                "Athletic ability",
+                "Specific techniques"
+            ],
+            "areas_for_improvement": [
+                "Versatility",
+                "Teaching others"
+            ]
+        }
+    }
+}

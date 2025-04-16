@@ -175,6 +175,131 @@
     #patternContainer {
       position: relative;
     }
+    .attribute.highlighted {
+      background-color: rgba(52, 152, 219, 0.1);
+      border-radius: 4px;
+      padding: 5px;
+    }
+    .edit-controls button {
+      margin: 0 5px;
+    }
+    .current-edit {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    .edit-mode .bar-container {
+        cursor: pointer;
+        position: relative;
+    }
+
+    .edit-input {
+        position: absolute;
+        right: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        z-index: 10;
+        padding: 2px 5px;
+        border: 1px solid #3498db;
+        border-radius: 3px;
+    }
+
+    .edit-controls {
+        background: #f8f9fa;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 8px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .edit-controls button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .edit-controls button:hover {
+        background-color: #2980b9;
+    }
+
+    .edit-controls button.save-btn {
+        background-color: #27ae60;
+    }
+
+    .edit-controls button.save-btn:hover {
+        background-color: #219a52;
+    }
+
+    .edit-controls button.cancel-btn {
+        background-color: #e74c3c;
+    }
+
+    .edit-controls button.cancel-btn:hover {
+        background-color: #c0392b;
+    }
+
+    .editing {
+        background-color: rgba(52, 152, 219, 0.1);
+    }
+
+    .edit-mode-controls {
+        margin: 15px 0;
+        text-align: center;
+    }
+
+    .value-input {
+        position: absolute;
+        right: 45px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        padding: 2px;
+        border: 1px solid #3498db;
+        border-radius: 3px;
+        display: none;
+        z-index: 10;
+    }
+
+    .editing {
+        background-color: rgba(52, 152, 219, 0.1);
+    }
+
+    /* Visual indicator for edit mode */
+    .edit-mode .assessment-container {
+        background-color: #f0f0f0;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Make bars clickable in edit mode */
+    .edit-mode .bar-container {
+        cursor: pointer;
+    }
+
+    /* Bar colors */
+    .bar[data-value="1"],
+    .bar[data-value="2"],
+    .bar[data-value="3"] {
+        background-color: rgba(255, 99, 71, 0.7) !important;
+    }
+    
+    .bar[data-value="4"],
+    .bar[data-value="5"],
+    .bar[data-value="6"],
+    .bar[data-value="7"] {
+        background-color: rgba(255, 205, 86, 0.7) !important;
+    }
+    
+    .bar[data-value="8"],
+    .bar[data-value="9"],
+    .bar[data-value="10"] {
+        background-color: rgba(75, 192, 192, 0.7) !important;
+    }
   </style>
 </head>
 <body>
@@ -201,6 +326,12 @@
           <option value="archetype:gear_obsessive">The Gear Obsessive</option>
         </optgroup>
       </select>
+    </div>
+    
+    <div class="edit-mode-controls">
+        <button id="editModeBtn" onclick="toggleEditMode()">Enter Edit Mode</button>
+        <button id="saveChangesBtn" onclick="saveChanges()" style="display: none;">Save Changes</button>
+        <button id="cancelEditBtn" onclick="cancelEdit()" style="display: none;">Cancel</button>
     </div>
     
     <div id="archetypeInfo" style="display: none; margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px;">
@@ -257,68 +388,74 @@
           <div class="category-title">Technical Attributes</div>
           <div class="attribute">
             <div class="attribute-name">Controlled Movements</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="controlledMovements" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Controlled Submissions</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="controlledSubmissions" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Modular Intensity</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="modularIntensity" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Depth of Knowledge</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="depthOfKnowledge" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Injury Knowledge</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="injuryKnowledge" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Specific Work</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="specificWork" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
         </div>
@@ -328,112 +465,122 @@
           <div class="category-title">Mindset</div>
           <div class="attribute">
             <div class="attribute-name">Controlled Ego</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="controlledEgo" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Friendly Attitude</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="friendlyAttitude" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">R&D Mindset</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="rdMindset" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Not Overtalking</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="notOvertalking" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Communicative</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="communicative" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Feedback Receptivity</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="feedbackReceptivity" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Safety Consciousness</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="safetyConsciousness" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Recovery Awareness</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="recoveryAwareness" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Identify Weaknesses</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="identifyWeaknesses" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Reliability</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="reliability" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
         </div>
@@ -443,123 +590,134 @@
           <div class="category-title">Physical Attributes</div>
           <div class="attribute">
             <div class="attribute-name">Strength</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="strength" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Grip Strength</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="gripStrength" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Flexibility</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="flexibility" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Mobility</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="mobility" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Weight</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="weight" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Cardio</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="cardio" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Explosiveness</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="explosiveness" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Coordination</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="coordination" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Reaction Time</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="reactionTime" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Constitution</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="constitution" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
           <div class="attribute">
             <div class="attribute-name">Hygiene</div>
-            <div class="bar-container">
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="hygiene" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
           </div>
         </div>
@@ -569,6 +727,23 @@
 
   <script>
     let currentProfile = 'self';
+    let isEditMode = false;
+    let currentValues = {};
+    const attributes = [
+        // Technical Attributes
+        "controlledMovements", "controlledSubmissions", "modularIntensity",
+        "depthOfKnowledge", "injuryKnowledge", "specificWork",
+        
+        // Mindset
+        "controlledEgo", "friendlyAttitude", "rdMindset", "notOvertalking",
+        "communicative", "feedbackReceptivity", "safetyConsciousness",
+        "recoveryAwareness", "identifyWeaknesses", "reliability",
+        
+        // Physical Attributes
+        "strength", "gripStrength", "flexibility", "mobility", "weight",
+        "cardio", "explosiveness", "coordination", "reactionTime",
+        "constitution", "hygiene"
+    ];
     
     // Function to update the bar visualization
     function updateBar(attribute, score) {
@@ -648,35 +823,45 @@
     async function loadProfile(profileId) {
       try {
         let response;
+        let archetypeName = '';
+        
         if (profileId.startsWith('archetype:')) {
-          // Load archetype profile
-          const archetypeName = profileId.split(':')[1];
+          archetypeName = profileId.split(':')[1];
           response = await fetch(`/api/archetypes/${archetypeName}`);
-          const data = await response.json();
-          
-          // Show archetype info
-          document.getElementById('archetypeInfo').style.display = 'block';
-          document.getElementById('archetypeName').textContent = archetypeName.split('_').map(word => 
-            word.charAt(0).toUpperCase() + word.slice(1)
-          ).join(' ');
-          
-          if (data.metadata) {
-            document.getElementById('archetypeDescription').textContent = data.metadata.description;
-            document.getElementById('strengths').innerHTML = `<strong>Strengths:</strong> ${data.metadata.strengths.join(', ')}`;
-            document.getElementById('improvements').innerHTML = `<strong>Areas for Improvement:</strong> ${data.metadata.areas_for_improvement.join(', ')}`;
-          }
-
-          // Update bars
-          updateBars(data);
         } else {
-          // Load regular profile
-          document.getElementById('archetypeInfo').style.display = 'none';
           response = await fetch(`/api/profiles/${profileId}`);
-          const data = await response.json();
-          updateBars(data);
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Loading profile data:', data); // Debug log
+
+        // Update the display
+        updateBars(data);
+        
+        // Fix: Use the correct function name and add timeout
+        setTimeout(drawConnectorLines, 600); // Wait for animations to complete
+
+        // Show archetype info if it exists
+        const archetypeInfo = document.getElementById('archetypeInfo');
+        if (data.metadata && archetypeInfo) {
+          archetypeInfo.style.display = 'block';
+          if (archetypeName) {
+            document.getElementById('archetypeName').textContent = 
+              archetypeName.split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+          }
+          document.getElementById('archetypeDescription').textContent = data.metadata.description;
+        } else if (archetypeInfo) {
+          archetypeInfo.style.display = 'none';
         }
       } catch (error) {
         console.error('Error loading profile:', error);
+        alert('Error loading profile: ' + error.message);
       }
     }
     
@@ -756,7 +941,243 @@
     window.addEventListener('resize', handleResize);
     
     // Initial load
-    loadProfile(document.getElementById('personSelect').value);
+    window.addEventListener('DOMContentLoaded', function() {
+      const initialProfile = document.getElementById('personSelect').value;
+      loadProfile(initialProfile);
+    });
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const editBtn = document.getElementById('editModeBtn');
+      const saveBtn = document.getElementById('saveChangesBtn');
+      const cancelBtn = document.getElementById('cancelEditBtn');
+      
+      // Toggle edit mode class on body
+      document.body.classList.toggle('edit-mode');
+      
+      if (isEditMode) {
+        editBtn.textContent = 'Exit Edit Mode';
+        saveBtn.style.display = 'inline';
+        cancelBtn.style.display = 'inline';
+        // Store current values
+        storeCurrentValues();
+        // Add click listeners to bars
+        addBarClickListeners();
+      } else {
+        editBtn.textContent = 'Enter Edit Mode';
+        saveBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+        // Remove click listeners
+        removeBarClickListeners();
+      }
+    }
+
+    function addBarClickListeners() {
+      const containers = document.querySelectorAll('.bar-container');
+      containers.forEach(container => {
+        container.addEventListener('click', handleBarClick);
+      });
+    }
+
+    function removeBarClickListeners() {
+      const containers = document.querySelectorAll('.bar-container');
+      containers.forEach(container => {
+        container.removeEventListener('click', handleBarClick);
+      });
+    }
+
+    function handleBarClick(event) {
+      if (!isEditMode) return;
+      
+      const container = event.currentTarget;
+      const rect = container.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const containerWidth = rect.width;
+      
+      let value = Math.round((clickX / containerWidth) * 10);
+      value = Math.max(0, Math.min(10, value));
+      
+      const bar = container.querySelector('.bar');
+      const label = container.querySelector('.score-label');
+      const dot = container.querySelector('.dot');
+      const attribute = bar.dataset.attribute;
+      
+      bar.style.width = `${value * 10}%`;
+      label.textContent = value;
+      
+      if (dot) {
+        dot.style.left = `${value * 10}%`;
+        dot.style.display = 'block';
+      }
+      
+      currentValues[attribute] = value;
+      console.log('Updated values:', currentValues); // Debug log
+      
+      // Redraw connecting lines
+      drawConnectingLines();
+    }
+
+    function storeCurrentValues() {
+      currentValues = {};
+      const bars = document.querySelectorAll('.bar');
+      bars.forEach(bar => {
+        const attribute = bar.dataset.attribute;
+        const value = parseInt(bar.parentElement.querySelector('.score-label').textContent);
+        currentValues[attribute] = value;
+      });
+      console.log('Stored initial values:', currentValues); // Debug log
+    }
+
+    // Add this to your existing updateBars function
+    function updateBars(data) {
+      Object.entries(data).forEach(([key, value]) => {
+        if (key !== 'metadata') {
+          const bar = document.querySelector(`[data-attribute="${key}"]`);
+          if (bar) {
+            const container = bar.parentElement;
+            const width = value * 10;
+            
+            // Set the bar color based on value
+            if (value <= 3) {
+                bar.style.backgroundColor = 'rgba(255, 99, 71, 0.7)'; // Red for Needs Work
+            } else if (value <= 7) {
+                bar.style.backgroundColor = 'rgba(255, 205, 86, 0.7)'; // Yellow for Developing
+            } else {
+                bar.style.backgroundColor = 'rgba(75, 192, 192, 0.7)'; // Green for Excellent
+            }
+
+            bar.style.width = `${width}%`;
+            container.querySelector('.score-label').textContent = value;
+            
+            // Update dot position
+            const dot = container.querySelector('.dot');
+            if (dot) {
+                dot.style.left = `${width}%`;
+                dot.style.display = 'block';
+            }
+          }
+        }
+      });
+      
+      // Draw connecting lines after updating bars
+      drawConnectingLines();
+    }
+
+    // Add this function to draw connecting lines
+    function drawConnectingLines() {
+      const dots = document.querySelectorAll('.dot');
+      const container = document.getElementById('patternContainer');
+      
+      // Remove existing lines
+      container.querySelectorAll('.connector-line').forEach(line => line.remove());
+      
+      // Show all dots
+      dots.forEach(dot => dot.style.display = 'block');
+      
+      // Draw lines between consecutive dots
+      for (let i = 0; i < dots.length - 1; i++) {
+        const dot1 = dots[i];
+        const dot2 = dots[i + 1];
+        
+        const x1 = parseFloat(dot1.style.left);
+        const y1 = dot1.offsetTop;
+        const x2 = parseFloat(dot2.style.left);
+        const y2 = dot2.offsetTop;
+        
+        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        
+        const line = document.createElement('div');
+        line.className = 'connector-line';
+        line.style.width = `${length}px`;
+        line.style.transform = `rotate(${angle}rad)`;
+        line.style.left = `${x1}px`;
+        line.style.top = `${y1}px`;
+        
+        container.appendChild(line);
+      }
+    }
+
+    async function saveChanges() {
+      const profileId = document.getElementById('personSelect').value;
+      const isArchetype = profileId.startsWith('archetype:');
+      
+      try {
+        let response;
+        if (isArchetype) {
+          // Extract the actual archetype name without 'archetype:'
+          const archetypeName = profileId.split(':')[1];
+          console.log('Saving archetype:', archetypeName, currentValues); // Debug log
+          
+          response = await fetch(`/api/archetypes/${archetypeName}`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(currentValues)
+          });
+        } else {
+          response = await fetch(`/api/profiles/${profileId}`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(currentValues)
+          });
+        }
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Save response:', result); // Debug log
+        
+        // Exit edit mode
+        toggleEditMode();
+        
+        // Reload the profile
+        setTimeout(() => {
+          loadProfile(profileId);
+        }, 100); // Small delay to ensure server has processed the save
+        
+      } catch (error) {
+        console.error('Error saving changes:', error);
+        alert(`Error saving changes: ${error.message}`);
+      }
+    }
+
+    function cancelEdit() {
+      // Restore original values
+      Object.entries(currentValues).forEach(([attribute, value]) => {
+        const bar = document.querySelector(`[data-attribute="${attribute}"]`);
+        if (bar) {
+          bar.style.width = `${value * 10}%`;
+          bar.parentElement.querySelector('.score-label').textContent = value;
+        }
+      });
+      toggleEditMode();
+    }
+
+    function exitEditMode() {
+      isEditMode = false;
+      document.body.classList.remove('edit-mode');
+      document.querySelector('.edit-controls').style.display = 'none';
+      
+      // Hide all edit inputs
+      document.querySelectorAll('.edit-input').forEach(input => {
+        input.style.display = 'none';
+      });
+      
+      // Reset pending changes
+      currentValues = {};
+      
+      // Remove click handlers
+      const containers = document.querySelectorAll('.bar-container');
+      containers.forEach(container => {
+        container.style.cursor = 'default';
+      });
+    }
   </script>
 </body>
 </html>
