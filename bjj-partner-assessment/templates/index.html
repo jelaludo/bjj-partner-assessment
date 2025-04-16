@@ -1,1 +1,762 @@
-<!-- templates/index.html --><!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>BJJ Training Partner Assessment</title>  <style>    body {      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;      max-width: 1000px;      margin: 0 auto;      padding: 20px;      background-color: #f5f5f5;    }    h1 {      text-align: center;      color: #333;      margin-bottom: 30px;    }    .assessment-container {      background-color: white;      border-radius: 8px;      padding: 20px;      box-shadow: 0 2px 10px rgba(0,0,0,0.1);    }    .category {      margin-bottom: 30px;    }    .category-title {      font-size: 18px;      font-weight: bold;      margin-bottom: 10px;      color: #444;      border-bottom: 2px solid #ddd;      padding-bottom: 5px;    }    .attribute {      display: flex;      align-items: center;      margin-bottom: 15px;    }    .attribute-name {      width: 35%;      font-weight: 500;      padding-right: 15px;    }    .bar-container {      position: relative;      height: 25px;      background-color: #eee;      border-radius: 4px;      overflow: hidden;      flex-grow: 1;    }    .zone {      position: absolute;      height: 100%;      top: 0;    }    .zone-red {      left: 0;      width: 30%;      background-color: rgba(255, 99, 71, 0.3);    }    .zone-yellow {      left: 30%;      width: 40%;      background-color: rgba(255, 205, 86, 0.3);    }    .zone-green {      left: 70%;      width: 30%;      background-color: rgba(75, 192, 192, 0.3);    }    .bar {      position: absolute;      height: 100%;      top: 0;      left: 0;      background-color: #3498db;      border-radius: 4px;      transition: width 0.5s ease;      z-index: 1;    }    .score-label {      position: absolute;      right: 10px;      top: 50%;      transform: translateY(-50%);      font-weight: bold;      z-index: 2;      color: #333;    }    .scale {      display: flex;      justify-content: space-between;      margin-bottom: 20px;      padding: 0 5px;      width: 65%;      margin-left: auto;    }    .controls {      margin-bottom: 20px;      text-align: center;    }    button {      background-color: #3498db;      color: white;      border: none;      padding: 8px 15px;      border-radius: 4px;      margin: 0 5px;      cursor: pointer;      transition: background-color 0.3s;    }    button:hover {      background-color: #2980b9;    }    .person-select {      margin-bottom: 15px;      text-align: center;    }    select {      padding: 8px;      border-radius: 4px;      border: 1px solid #ddd;      width: 200px;    }    .legend {      display: flex;      justify-content: center;      margin-bottom: 20px;    }    .legend-item {      display: flex;      align-items: center;      margin: 0 10px;    }    .legend-color {      width: 15px;      height: 15px;      margin-right: 5px;      border-radius: 3px;    }    .red {      background-color: rgba(255, 99, 71, 0.7);    }    .yellow {      background-color: rgba(255, 205, 86, 0.7);    }    .green {      background-color: rgba(75, 192, 192, 0.7);    }    .blue {      background-color: #3498db;    }    .dot {      position: absolute;      width: 12px;      height: 12px;      background-color: #2c3e50;      border-radius: 50%;      bottom: -6px;      transform: translateX(-50%);      z-index: 3;      border: 2px solid white;    }    .connector-line {      position: absolute;      width: 2px;      background-color: rgba(44, 62, 80, 0.5);      z-index: 2;    }    #patternContainer {      position: relative;    }  </style></head><body>  <div class="assessment-container">    <h1>BJJ Training Partner Assessment</h1>        <div class="person-select">      <select id="personSelect">        <option value="self">Self Assessment</option>        <option value="partner1">Training Partner 1</option>        <option value="partner2">Training Partner 2</option>      </select>    </div>        <div class="legend">      <div class="legend-item">        <div class="legend-color red"></div>        <span>Needs Work (1-3)</span>      </div>      <div class="legend-item">        <div class="legend-color yellow"></div>        <span>Developing (4-7)</span>      </div>      <div class="legend-item">        <div class="legend-color green"></div>        <span>Excellent (8-10)</span>      </div>      <div class="legend-item">        <div class="legend-color blue"></div>        <span>Score</span>      </div>    </div>        <div class="scale">      <span>0</span>      <span>1</span>      <span>2</span>      <span>3</span>      <span>4</span>      <span>5</span>      <span>6</span>      <span>7</span>      <span>8</span>      <span>9</span>      <span>10</span>    </div>    <div class="controls">      <button id="randomBtn">Generate Random Scores</button>      <button id="resetBtn">Reset Scores</button>    </div>        <div id="patternContainer">      <div id="assessmentData">        <!-- Technical Attributes -->        <div class="category">          <div class="category-title">Technical Attributes</div>                    <div class="attribute">            <div class="attribute-name">Controlled Movements</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="controlledMovements" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Controlled Submissions</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="controlledSubmissions" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Modular Intensity</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="modularIntensity" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Depth of Knowledge</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="depthOfKnowledge" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Knowledgeable about injury patterns</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="injuryKnowledge" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Ability to work on specifics/give "looks"</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="specificWork" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>        </div>                <!-- Mindset & Attitude -->        <div class="category">          <div class="category-title">Mindset & Attitude</div>                    <div class="attribute">            <div class="attribute-name">Controlled Ego</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="controlledEgo" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Friendly, playful attitude</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="friendlyAttitude" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">R&D mindset (discover & troubleshoot)</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="rdMindset" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Not overtalking/over-explaining</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="notOvertalking" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Communicative about boundaries and injuries</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="communicative" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Feedback receptivity</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="feedbackReceptivity" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Safety consciousness</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="safetyConsciousness" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Recovery awareness</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="recoveryAwareness" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Ability to identify weaknesses & improvements</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="identifyWeaknesses" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>        </div>                <!-- Others -->        <div class="category">          <div class="category-title">Others</div>                    <div class="attribute">            <div class="attribute-name">Hygiene</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="hygiene" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>                    <div class="attribute">            <div class="attribute-name">Reliability</div>            <div class="bar-container">              <div class="zone zone-red"></div>              <div class="zone zone-yellow"></div>              <div class="zone zone-green"></div>              <div class="bar" data-attribute="reliability" style="width: 0%"></div>              <div class="score-label">0</div>              <div class="dot" style="display: none;"></div>            </div>          </div>        </div>      </div>    </div>  </div>  <script>    let currentProfile = 'self';        // Function to update the bar visualization    function updateBar(attribute, score) {      const bar = document.querySelector(`.bar[data-attribute="${attribute}"]`);      const scoreLabel = bar.nextElementSibling;      const dot = scoreLabel.nextElementSibling;            // Update width and score label      bar.style.width = `${score * 10}%`;      scoreLabel.textContent = score;            // Update bar color based on score      if (score <= 3) {        bar.style.backgroundColor = 'rgba(255, 99, 71, 0.7)';      } else if (score <= 7) {        bar.style.backgroundColor = 'rgba(255, 205, 86, 0.7)';      } else {        bar.style.backgroundColor = 'rgba(75, 192, 192, 0.7)';      }            // Position the dot      if (score > 0) {        const position = score * 10;        dot.style.left = `${position}%`;        dot.style.display = 'block';      } else {        dot.style.display = 'none';      }    }        // Function to draw connector lines between dots    function drawConnectorLines() {      // Remove existing connector lines      document.querySelectorAll('.connector-line').forEach(line => {        line.remove();      });            const dots = Array.from(document.querySelectorAll('.dot')).filter(dot =>         dot.style.display !== 'none'      );            if (dots.length < 2) return;            const container = document.getElementById('patternContainer');      const containerRect = container.getBoundingClientRect();            for (let i = 0; i < dots.length - 1; i++) {        const currentDot = dots[i];        const nextDot = dots[i + 1];                const currentDotRect = currentDot.getBoundingClientRect();        const nextDotRect = nextDot.getBoundingClientRect();                const x1 = currentDotRect.left + currentDotRect.width / 2 - containerRect.left;        const y1 = currentDotRect.top + currentDotRect.height / 2 - containerRect.top;        const x2 = nextDotRect.left + nextDotRect.width / 2 - containerRect.left;        const y2 = nextDotRect.top + nextDotRect.height / 2 - containerRect.top;                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));        const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;                const line = document.createElement('div');        line.className = 'connector-line';        line.style.width = `${length}px`;        line.style.height = '2px';        line.style.position = 'absolute';        line.style.top = `${y1}px`;        line.style.left = `${x1}px`;        line.style.transformOrigin = '0 0';        line.style.transform = `rotate(${angle}deg)`;                container.appendChild(line);      }    }        // Function to load a profile from the API    async function loadProfile(profileName) {      try {        const response = await fetch(`/api/profiles/${profileName}`);        const profile = await response.json();                // Update all attributes based on the profile data        for (const attribute in profile) {          updateBar(attribute, profile[attribute]);        }                // Reset attributes not in the profile        document.querySelectorAll('.bar').forEach(bar => {          const attribute = bar.getAttribute('data-attribute');          if (!(attribute in profile)) {            updateBar(attribute, 0);          }        });                currentProfile = profileName;                // Draw connector lines after updating all dots        setTimeout(drawConnectorLines, 600); // Wait for animations to complete      } catch (error) {        console.error('Error loading profile:', error);      }    }        // Function to generate random scores    async function generateRandomScores() {      const attributes = document.querySelectorAll('.bar');      const randomData = {};            // Generate random scores for each attribute      attributes.forEach(bar => {        const attribute = bar.getAttribute('data-attribute');        const score = Math.floor(Math.random() * 10) + 1; // Random score from 1-10        randomData[attribute] = score;                // Update the visualization        updateBar(attribute, score);      });            // Save the random data to the API      try {        await fetch(`/api/profiles/${currentProfile}`, {          method: 'POST',          headers: {            'Content-Type': 'application/json',          },          body: JSON.stringify(randomData),        });      } catch (error) {        console.error('Error saving profile:', error);      }            // Draw connector lines after updating all dots      setTimeout(drawConnectorLines, 600); // Wait for animations to complete    }        // Function to reset scores    async function resetScores() {      // Reset all attributes      document.querySelectorAll('.bar').forEach(bar => {        const attribute = bar.getAttribute('data-attribute');        updateBar(attribute, 0);      });            // Clear the profile in the API      try {        await fetch(`/api/profiles/${currentProfile}`, {          method: 'POST',          headers: {            'Content-Type': 'application/json',          },          body: JSON.stringify({}),        });      } catch (error) {        console.error('Error resetting profile:', error);      }            // Remove connector lines      document.querySelectorAll('.connector-line').forEach(line => {        line.remove();      });    }        // Function to handle window resize    function handleResize() {      // Redraw connector lines when window size changes      drawConnectorLines();    }        // Event listeners    document.getElementById('personSelect').addEventListener('change', (e) => {      loadProfile(e.target.value);    });        document.getElementById('randomBtn').addEventListener('click', generateRandomScores);    document.getElementById('resetBtn').addEventListener('click', resetScores);        window.addEventListener('resize', handleResize);        // Initialize    document.addEventListener('DOMContentLoaded', function() {      loadProfile('self');    });  </script></body></html>
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BJJ Training Partner Assessment</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .assessment-container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .category {
+      margin-bottom: 30px;
+    }
+    .category-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #444;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+    .attribute {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .attribute-name {
+      width: 35%;
+      font-weight: 500;
+      padding-right: 15px;
+    }
+    .bar-container {
+      position: relative;
+      height: 25px;
+      background-color: #eee;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-grow: 1;
+    }
+    .zone {
+      position: absolute;
+      height: 100%;
+      top: 0;
+    }
+    .zone-red {
+      left: 0;
+      width: 30%;
+      background-color: rgba(255, 99, 71, 0.3);
+    }
+    .zone-yellow {
+      left: 30%;
+      width: 40%;
+      background-color: rgba(255, 205, 86, 0.3);
+    }
+    .zone-green {
+      left: 70%;
+      width: 30%;
+      background-color: rgba(75, 192, 192, 0.3);
+    }
+    .bar {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: #3498db;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      z-index: 1;
+    }
+    .score-label {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: bold;
+      z-index: 2;
+      color: #333;
+    }
+    .scale {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 0 5px;
+      width: 65%;
+      margin-left: auto;
+    }
+    .controls {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .person-select {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    select {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      width: 200px;
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin: 0 10px;
+    }
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+      border-radius: 3px;
+    }
+    .red {
+      background-color: rgba(255, 99, 71, 0.7);
+    }
+    .yellow {
+      background-color: rgba(255, 205, 86, 0.7);
+    }
+    .green {
+      background-color: rgba(75, 192, 192, 0.7);
+    }
+    .blue {
+      background-color: #3498db;
+    }
+    .dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background-color: #2c3e50;
+      border-radius: 50%;
+      bottom: -6px;
+      transform: translateX(-50%);
+      z-index: 3;
+      border: 2px solid white;
+    }
+    .connector-line {
+      position: absolute;
+      width: 2px;
+      background-color: rgba(44, 62, 80, 0.5);
+      z-index: 2;
+    }
+    #patternContainer {
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div class="assessment-container">
+    <h1>BJJ Training Partner Assessment</h1>
+    
+    <div class="person-select">
+      <select id="personSelect">
+        <option value="self">Self Assessment</option>
+        <option value="partner1">Training Partner 1</option>
+        <option value="partner2">Training Partner 2</option>
+        <optgroup label="Archetypal Profiles">
+          <option value="archetype:spazz">The Spazz</option>
+          <option value="archetype:brute">The Brute/Gorilla</option>
+          <option value="archetype:veteran">The Frail Old Guy/Veteran</option>
+          <option value="archetype:professor">The Professor/Instructor</option>
+          <option value="archetype:competitor">The Competitor</option>
+          <option value="archetype:chess_player">The Chess Player</option>
+          <option value="archetype:natural_athlete">The Natural Athlete</option>
+          <option value="archetype:hobbyist">The Hobbyist</option>
+          <option value="archetype:flaky_talent">The Flaky Talent</option>
+          <option value="archetype:injury_collector">The Injury Collector</option>
+          <option value="archetype:one_trick_pony">The One-Trick Pony</option>
+          <option value="archetype:gear_obsessive">The Gear Obsessive</option>
+        </optgroup>
+      </select>
+    </div>
+    
+    <div id="archetypeInfo" style="display: none; margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+      <h3 id="archetypeName" style="margin-top: 0; color: #2c3e50;"></h3>
+      <p id="archetypeDescription" style="color: #34495e;"></p>
+      <div id="archetypeDetails">
+        <div id="strengths"></div>
+        <div id="improvements"></div>
+      </div>
+    </div>
+    
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color red"></div>
+        <span>Needs Work (1-3)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color yellow"></div>
+        <span>Developing (4-7)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color green"></div>
+        <span>Excellent (8-10)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color blue"></div>
+        <span>Score</span>
+      </div>
+    </div>
+    
+    <div class="scale">
+      <span>0</span>
+      <span>1</span>
+      <span>2</span>
+      <span>3</span>
+      <span>4</span>
+      <span>5</span>
+      <span>6</span>
+      <span>7</span>
+      <span>8</span>
+      <span>9</span>
+      <span>10</span>
+    </div>
+
+    <div class="controls">
+      <button id="randomBtn">Generate Random Scores</button>
+      <button id="resetBtn">Reset Scores</button>
+    </div>
+    
+    <div id="patternContainer">
+      <div id="assessmentData">
+        <!-- Technical Attributes -->
+        <div class="category">
+          <div class="category-title">Technical Attributes</div>
+          <div class="attribute">
+            <div class="attribute-name">Controlled Movements</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="controlledMovements" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Controlled Submissions</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="controlledSubmissions" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Modular Intensity</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="modularIntensity" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Depth of Knowledge</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="depthOfKnowledge" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Injury Knowledge</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="injuryKnowledge" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Specific Work</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="specificWork" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mindset -->
+        <div class="category">
+          <div class="category-title">Mindset</div>
+          <div class="attribute">
+            <div class="attribute-name">Controlled Ego</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="controlledEgo" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Friendly Attitude</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="friendlyAttitude" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">R&D Mindset</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="rdMindset" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Not Overtalking</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="notOvertalking" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Communicative</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="communicative" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Feedback Receptivity</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="feedbackReceptivity" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Safety Consciousness</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="safetyConsciousness" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Recovery Awareness</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="recoveryAwareness" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Identify Weaknesses</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="identifyWeaknesses" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Reliability</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="reliability" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Physical Attributes -->
+        <div class="category">
+          <div class="category-title">Physical Attributes</div>
+          <div class="attribute">
+            <div class="attribute-name">Strength</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="strength" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Grip Strength</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="gripStrength" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Flexibility</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="flexibility" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Mobility</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="mobility" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Weight</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="weight" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Cardio</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="cardio" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Explosiveness</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="explosiveness" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Coordination</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="coordination" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Reaction Time</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="reactionTime" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Constitution</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="constitution" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Hygiene</div>
+            <div class="bar-container">
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="hygiene" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentProfile = 'self';
+    
+    // Function to update the bar visualization
+    function updateBar(attribute, score) {
+      const bar = document.querySelector(`.bar[data-attribute="${attribute}"]`);
+      const scoreLabel = bar.nextElementSibling;
+      const dot = scoreLabel.nextElementSibling;
+      
+      // Update width and score label
+      bar.style.width = `${score * 10}%`;
+      scoreLabel.textContent = score;
+      
+      // Update bar color based on score
+      if (score <= 3) {
+        bar.style.backgroundColor = 'rgba(255, 99, 71, 0.7)';
+      } else if (score <= 7) {
+        bar.style.backgroundColor = 'rgba(255, 205, 86, 0.7)';
+      } else {
+        bar.style.backgroundColor = 'rgba(75, 192, 192, 0.7)';
+      }
+      
+      // Position the dot
+      if (score > 0) {
+        const position = score * 10;
+        dot.style.left = `${position}%`;
+        dot.style.display = 'block';
+      } else {
+        dot.style.display = 'none';
+      }
+    }
+    
+    // Function to draw connector lines between dots
+    function drawConnectorLines() {
+      // Remove existing connector lines
+      document.querySelectorAll('.connector-line').forEach(line => {
+        line.remove();
+      });
+      
+      const dots = Array.from(document.querySelectorAll('.dot')).filter(dot => 
+        dot.style.display !== 'none'
+      );
+      
+      if (dots.length < 2) return;
+      
+      const container = document.getElementById('patternContainer');
+      const containerRect = container.getBoundingClientRect();
+      
+      for (let i = 0; i < dots.length - 1; i++) {
+        const currentDot = dots[i];
+        const nextDot = dots[i + 1];
+        
+        const currentDotRect = currentDot.getBoundingClientRect();
+        const nextDotRect = nextDot.getBoundingClientRect();
+        
+        const x1 = currentDotRect.left + currentDotRect.width / 2 - containerRect.left;
+        const y1 = currentDotRect.top + currentDotRect.height / 2 - containerRect.top;
+        const x2 = nextDotRect.left + nextDotRect.width / 2 - containerRect.left;
+        const y2 = nextDotRect.top + nextDotRect.height / 2 - containerRect.top;
+        
+        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+        
+        const line = document.createElement('div');
+        line.className = 'connector-line';
+        line.style.width = `${length}px`;
+        line.style.height = '2px';
+        line.style.position = 'absolute';
+        line.style.top = `${y1}px`;
+        line.style.left = `${x1}px`;
+        line.style.transformOrigin = '0 0';
+        line.style.transform = `rotate(${angle}deg)`;
+        
+        container.appendChild(line);
+      }
+    }
+    
+    // Function to load a profile from the API
+    async function loadProfile(profileId) {
+      try {
+        let response;
+        if (profileId.startsWith('archetype:')) {
+          // Load archetype profile
+          const archetypeName = profileId.split(':')[1];
+          response = await fetch(`/api/archetypes/${archetypeName}`);
+          const data = await response.json();
+          
+          // Show archetype info
+          document.getElementById('archetypeInfo').style.display = 'block';
+          document.getElementById('archetypeName').textContent = archetypeName.split('_').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' ');
+          
+          if (data.metadata) {
+            document.getElementById('archetypeDescription').textContent = data.metadata.description;
+            document.getElementById('strengths').innerHTML = `<strong>Strengths:</strong> ${data.metadata.strengths.join(', ')}`;
+            document.getElementById('improvements').innerHTML = `<strong>Areas for Improvement:</strong> ${data.metadata.areas_for_improvement.join(', ')}`;
+          }
+
+          // Update bars
+          updateBars(data);
+        } else {
+          // Load regular profile
+          document.getElementById('archetypeInfo').style.display = 'none';
+          response = await fetch(`/api/profiles/${profileId}`);
+          const data = await response.json();
+          updateBars(data);
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
+    }
+    
+    // Function to generate random scores
+    async function generateRandomScores() {
+      const attributes = document.querySelectorAll('.bar');
+      const randomData = {};
+      
+      // Generate random scores for each attribute
+      attributes.forEach(bar => {
+        const attribute = bar.getAttribute('data-attribute');
+        const score = Math.floor(Math.random() * 10) + 1; // Random score from 1-10
+        randomData[attribute] = score;
+        
+        // Update the visualization
+        updateBar(attribute, score);
+      });
+      
+      // Save the random data to the API
+      try {
+        await fetch(`/api/profiles/${currentProfile}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(randomData),
+        });
+      } catch (error) {
+        console.error('Error saving profile:', error);
+      }
+      
+      // Draw connector lines after updating all dots
+      setTimeout(drawConnectorLines, 600); // Wait for animations to complete
+    }
+    
+    // Function to reset scores
+    async function resetScores() {
+      // Reset all attributes
+      document.querySelectorAll('.bar').forEach(bar => {
+        const attribute = bar.getAttribute('data-attribute');
+        updateBar(attribute, 0);
+      });
+      
+      // Clear the profile in the API
+      try {
+        await fetch(`/api/profiles/${currentProfile}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        });
+      } catch (error) {
+        console.error('Error resetting profile:', error);
+      }
+      
+      // Remove connector lines
+      document.querySelectorAll('.connector-line').forEach(line => {
+        line.remove();
+      });
+    }
+    
+    // Function to handle window resize
+    function handleResize() {
+      // Redraw connector lines when window size changes
+      drawConnectorLines();
+    }
+    
+    // Event listeners
+    document.getElementById('personSelect').addEventListener('change', function() {
+      loadProfile(this.value);
+    });
+    
+    document.getElementById('randomBtn').addEventListener('click', generateRandomScores);
+    document.getElementById('resetBtn').addEventListener('click', resetScores);
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Initial load
+    loadProfile(document.getElementById('personSelect').value);
+  </script>
+</body>
+</html>

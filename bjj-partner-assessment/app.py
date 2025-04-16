@@ -1,1 +1,60 @@
-# app.pyfrom flask import Flask, render_template, jsonify, requestapp = Flask(__name__)# Sample data for different profilesprofiles = {    "self": {},    "partner1": {        "controlledMovements": 7,        "controlledSubmissions": 8,        "modularIntensity": 6,        "depthOfKnowledge": 5,        "injuryKnowledge": 6,        "specificWork": 7,        "controlledEgo": 9,        "friendlyAttitude": 8,        "rdMindset": 7,        "notOvertalking": 6,        "communicative": 8,        "feedbackReceptivity": 9,        "safetyConsciousness": 8,        "recoveryAwareness": 7,        "identifyWeaknesses": 6,        "hygiene": 9,        "reliability": 8    },    "partner2": {        "controlledMovements": 9,        "controlledSubmissions": 9,        "modularIntensity": 8,        "depthOfKnowledge": 9,        "injuryKnowledge": 7,        "specificWork": 8,        "controlledEgo": 6,        "friendlyAttitude": 7,        "rdMindset": 9,        "notOvertalking": 5,        "communicative": 6,        "feedbackReceptivity": 7,        "safetyConsciousness": 8,        "recoveryAwareness": 7,        "identifyWeaknesses": 9,        "hygiene": 8,        "reliability": 7    }}@app.route('/')def index():    return render_template('index.html')@app.route('/api/profiles')def get_profiles():    return jsonify(profiles)@app.route('/api/profiles/<profile_name>')def get_profile(profile_name):    if profile_name in profiles:        return jsonify(profiles[profile_name])    return jsonify({})@app.route('/api/profiles/<profile_name>', methods=['POST'])def update_profile(profile_name):    if profile_name not in profiles:        profiles[profile_name] = {}        data = request.json    profiles[profile_name].update(data)    return jsonify(profiles[profile_name])if __name__ == '__main__':    app.run(debug=True)
+# app.py
+from flask import Flask, render_template, jsonify, request
+import json
+from functools import lru_cache
+import os
+
+app = Flask(__name__)
+
+# Cache for profiles
+@lru_cache()
+def load_profiles():
+    with open('profiles.json', 'r') as f:
+        return json.load(f)
+
+# Cache for archetypal profiles
+@lru_cache()
+def load_archetypal_profiles():
+    with open('archetypal_profiles.json', 'r') as f:
+        return json.load(f)
+
+# Save profiles to JSON file
+def save_profiles(profiles_data):
+    with open('profiles.json', 'w') as f:
+        json.dump(profiles_data, f, indent=4)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/profiles')
+def get_profiles():
+    return jsonify(load_profiles())
+
+@app.route('/api/profiles/<profile_name>')
+def get_profile(profile_name):
+    profiles = load_profiles()
+    return jsonify(profiles.get(profile_name, {}))
+
+@app.route('/api/profiles/<profile_name>', methods=['POST'])
+def update_profile(profile_name):
+    profiles = load_profiles()
+    if profile_name not in profiles:
+        profiles[profile_name] = {}
+    
+    data = request.json
+    profiles[profile_name].update(data)
+    save_profiles(profiles)  # Save changes to file
+    return jsonify(profiles[profile_name])
+
+@app.route('/api/archetypes')
+def get_archetypes():
+    return jsonify(load_archetypal_profiles())
+
+@app.route('/api/archetypes/<archetype_name>')
+def get_specific_archetype(archetype_name):
+    archetypes = load_archetypal_profiles()
+    return jsonify(archetypes.get(archetype_name, {}))
+
+if __name__ == '__main__':
+    app.run(debug=True)
