@@ -110,8 +110,17 @@ def load_archetypal_profiles():
 # Save profiles to JSON file
 def save_profiles(profiles_data):
     ensure_data_directory()
-    with open(PROFILES_FILE, 'w') as f:
-        json.dump(profiles_data, f, indent=4)
+    try:
+        # Create a temporary file first
+        temp_file = PROFILES_FILE.with_suffix('.tmp')
+        with open(temp_file, 'w') as f:
+            json.dump(profiles_data, f, indent=4)
+        
+        # Then rename it to the actual file (atomic operation)
+        temp_file.replace(PROFILES_FILE)
+    except Exception as e:
+        print(f"Error saving profiles: {str(e)}")
+        raise
 
 # Add this function to clear the cache
 def clear_caches():
@@ -120,8 +129,17 @@ def clear_caches():
 
 def save_archetypes(archetypes_data):
     ensure_data_directory()
-    with open(ARCHETYPES_FILE, 'w') as f:
-        json.dump(archetypes_data, f, indent=4)
+    try:
+        # Create a temporary file first
+        temp_file = ARCHETYPES_FILE.with_suffix('.tmp')
+        with open(temp_file, 'w') as f:
+            json.dump(archetypes_data, f, indent=4)
+        
+        # Then rename it to the actual file (atomic operation)
+        temp_file.replace(ARCHETYPES_FILE)
+    except Exception as e:
+        print(f"Error saving archetypes: {str(e)}")
+        raise
 
 @app.route('/')
 def index():
@@ -242,6 +260,24 @@ def update_archetype(archetype_name):
         return jsonify(archetypes[archetype_name])
     except Exception as e:
         print(f"Error updating archetype: {str(e)}")  # Server-side logging
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/profiles/<profile_name>', methods=['POST'])
+def update_profile(profile_name):
+    try:
+        profiles = load_profiles()
+        data = request.json
+        
+        # Update existing profile or create new one
+        profiles[profile_name] = data
+        
+        # Save to file
+        save_profiles(profiles)
+        clear_caches()  # Clear cache to ensure fresh data on next load
+        
+        return jsonify(profiles[profile_name])
+    except Exception as e:
+        print(f"Error updating profile: {str(e)}")  # Server-side logging
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
