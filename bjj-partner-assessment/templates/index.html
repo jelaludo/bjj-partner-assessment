@@ -1060,7 +1060,7 @@
       // Remove existing lines
       container.querySelectorAll('.connector-line').forEach(line => line.remove());
       
-      // Show dots for all attributes with values and store their positions
+      // Show dots for all attributes with values
       const allDots = Array.from(document.querySelectorAll('.dot')).filter(dot => {
         const scoreLabel = dot.previousElementSibling;
         const hasValue = scoreLabel && scoreLabel.textContent !== '';
@@ -1070,23 +1070,11 @@
         return hasValue;
       });
       
-      // Define the major categories
-      const categories = [
-        "Partner Impact",
-        "Individual Performance"
-      ];
-      
-      // Process each major category
-      categories.forEach(categoryName => {
-        const categorySection = Array.from(document.querySelectorAll('.major-category-title'))
-          .find(el => el.textContent.includes(categoryName))
-          ?.closest('.major-category');
-        
-        if (!categorySection) return;
-        
-        // Get all visible dots within this major category
+      // Process each category section
+      document.querySelectorAll('.category').forEach(category => {
+        // Get all visible dots within this category
         const categoryDots = allDots.filter(dot => 
-          categorySection.contains(dot)
+          category.contains(dot)
         );
         
         // Draw lines between consecutive dots
@@ -1102,19 +1090,19 @@
           const y1 = rect1.top + rect1.height / 2 - containerRect.top;
           const x2 = rect2.left + rect2.width / 2 - containerRect.left;
           const y2 = rect2.top + rect2.height / 2 - containerRect.top;
-        
-        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+          
+          const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
           const angle = Math.atan2(y2 - y1, x2 - x1);
-        
-        const line = document.createElement('div');
-        line.className = 'connector-line';
-        line.style.width = `${length}px`;
+          
+          const line = document.createElement('div');
+          line.className = 'connector-line';
+          line.style.width = `${length}px`;
           line.style.transform = `rotate(${angle}rad)`;
-        line.style.left = `${x1}px`;
+          line.style.left = `${x1}px`;
           line.style.top = `${y1}px`;
-        
-        container.appendChild(line);
-      }
+          
+          container.appendChild(line);
+        }
       });
     }
     
@@ -1369,7 +1357,7 @@
       // Remove existing lines
       container.querySelectorAll('.connector-line').forEach(line => line.remove());
       
-      // Show dots for all attributes with values and store their positions
+      // Show dots for all attributes with values
       const allDots = Array.from(document.querySelectorAll('.dot')).filter(dot => {
         const scoreLabel = dot.previousElementSibling;
         const hasValue = scoreLabel && scoreLabel.textContent !== '';
@@ -1379,23 +1367,11 @@
         return hasValue;
       });
       
-      // Define the major categories
-      const categories = [
-        "Partner Impact",
-        "Individual Performance"
-      ];
-      
-      // Process each major category
-      categories.forEach(categoryName => {
-        const categorySection = Array.from(document.querySelectorAll('.major-category-title'))
-          .find(el => el.textContent.includes(categoryName))
-          ?.closest('.major-category');
-        
-        if (!categorySection) return;
-        
-        // Get all visible dots within this major category
+      // Process each category section
+      document.querySelectorAll('.category').forEach(category => {
+        // Get all visible dots within this category
         const categoryDots = allDots.filter(dot => 
-          categorySection.contains(dot)
+          category.contains(dot)
         );
         
         // Draw lines between consecutive dots
