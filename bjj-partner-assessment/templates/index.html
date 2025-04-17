@@ -168,8 +168,9 @@
     }
     .connector-line {
       position: absolute;
-      width: 2px;
+      height: 2px;
       background-color: rgba(44, 62, 80, 0.5);
+      transform-origin: left center;
       z-index: 2;
     }
     #patternContainer {
@@ -692,6 +693,19 @@
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
                     </div>
                 </div>
+
+                <div class="attribute" data-tooltip="A fresh breath is key when you're sometimes literally breathing down their neck. Brush those teeth and get some mints.">
+                    <div class="attribute-name">Dental Hygiene</div>
+                    <div class="bar-container" onclick="handleBarClick(event, this)">
+                        <div class="zone zone-red"></div>
+                        <div class="zone zone-yellow"></div>
+                        <div class="zone zone-green"></div>
+                        <div class="bar" data-attribute="dentalHygiene" style="width: 0%"></div>
+                        <div class="score-label">0</div>
+                        <div class="dot" style="display: none;"></div>
+                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -926,47 +940,80 @@
     
     // Function to draw connector lines between dots
     function drawConnectorLines() {
-      // Remove existing connector lines
-      document.querySelectorAll('.connector-line').forEach(line => {
-        line.remove();
-      });
-      
-      const dots = Array.from(document.querySelectorAll('.dot')).filter(dot => 
-        dot.style.display !== 'none'
-      );
-      
-      if (dots.length < 2) return;
-      
+      console.log('Drawing lines...');
       const container = document.getElementById('patternContainer');
-      const containerRect = container.getBoundingClientRect();
-      
-      for (let i = 0; i < dots.length - 1; i++) {
-        const currentDot = dots[i];
-        const nextDot = dots[i + 1];
-        
-        const currentDotRect = currentDot.getBoundingClientRect();
-        const nextDotRect = nextDot.getBoundingClientRect();
-        
-        const x1 = currentDotRect.left + currentDotRect.width / 2 - containerRect.left;
-        const y1 = currentDotRect.top + currentDotRect.height / 2 - containerRect.top;
-        const x2 = nextDotRect.left + nextDotRect.width / 2 - containerRect.left;
-        const y2 = nextDotRect.top + nextDotRect.height / 2 - containerRect.top;
-        
-        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-        
-        const line = document.createElement('div');
-        line.className = 'connector-line';
-        line.style.width = `${length}px`;
-        line.style.height = '2px';
-        line.style.position = 'absolute';
-        line.style.top = `${y1}px`;
-        line.style.left = `${x1}px`;
-        line.style.transformOrigin = '0 0';
-        line.style.transform = `rotate(${angle}deg)`;
-        
-        container.appendChild(line);
+      if (!container) {
+          console.error('Pattern container not found!');
+          return;
       }
+      
+      // Clear existing lines
+      container.querySelectorAll('.connector-line').forEach(line => line.remove());
+      
+      // Define our sections
+      const sectionSelectors = [
+          '.category-title:contains("Technical Attributes")',
+          '.category-title:contains("Partner Mindset")',
+          '.category-title:contains("Hygiene")',
+          '.category-title:contains("Physical Attributes")'
+      ];
+      
+      sectionSelectors.forEach(selector => {
+          // Find the section
+          const sections = Array.from(document.querySelectorAll('.category-title'))
+              .filter(el => el.textContent.includes(selector.split('contains("')[1].split('")')[0]));
+              
+          sections.forEach(section => {
+              const categoryDiv = section.closest('.category');
+              if (!categoryDiv) {
+                  console.error('Category div not found for', selector);
+                  return;
+              }
+              
+              // Get all dots in this category that have a value
+              const dots = Array.from(categoryDiv.querySelectorAll('.dot'))
+                  .filter(dot => {
+                      const scoreLabel = dot.previousElementSibling;
+                      return scoreLabel && scoreLabel.textContent !== '';
+                  });
+              
+              console.log(`Found ${dots.length} dots in ${section.textContent.trim()}`);
+              
+              // Make all valid dots visible
+              dots.forEach(dot => dot.style.display = 'block');
+              
+              // Draw lines between consecutive dots
+              for (let i = 0; i < dots.length - 1; i++) {
+                  const dot1 = dots[i];
+                  const dot2 = dots[i + 1];
+                  
+                  const rect1 = dot1.getBoundingClientRect();
+                  const rect2 = dot2.getBoundingClientRect();
+                  const containerRect = container.getBoundingClientRect();
+                  
+                  // Calculate positions relative to container
+                  const x1 = rect1.left + (rect1.width / 2) - containerRect.left;
+                  const y1 = rect1.top + (rect1.height / 2) - containerRect.top;
+                  const x2 = rect2.left + (rect2.width / 2) - containerRect.left;
+                  const y2 = rect2.top + (rect2.height / 2) - containerRect.top;
+                  
+                  // Calculate line properties
+                  const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                  const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+                  
+                  // Create and position the line
+                  const line = document.createElement('div');
+                  line.className = 'connector-line';
+                  line.style.width = `${length}px`;
+                  line.style.left = `${x1}px`;
+                  line.style.top = `${y1}px`;
+                  line.style.transform = `rotate(${angle}deg)`;
+                  
+                  container.appendChild(line);
+                  console.log(`Drew line in ${section.textContent.trim()}: length=${length}, angle=${angle}`);
+              }
+          });
+      });
     }
     
     // Function to load a profile from the API
@@ -1215,37 +1262,81 @@
 
     // Add this function to draw connecting lines
     function drawConnectingLines() {
-      const dots = document.querySelectorAll('.dot');
       const container = document.getElementById('patternContainer');
       
       // Remove existing lines
       container.querySelectorAll('.connector-line').forEach(line => line.remove());
       
-      // Show all dots
-      dots.forEach(dot => dot.style.display = 'block');
+      // Show dots for all attributes with values
+      document.querySelectorAll('.dot').forEach(dot => {
+        const scoreLabel = dot.previousElementSibling;
+        if (scoreLabel && scoreLabel.textContent !== '') {
+          dot.style.display = 'block';
+        }
+      });
       
-      // Draw lines between consecutive dots
-      for (let i = 0; i < dots.length - 1; i++) {
-        const dot1 = dots[i];
-        const dot2 = dots[i + 1];
+      // Define the sections we want to connect
+      const sections = [
+        {
+          title: "Technical Attributes",
+          selector: ".category-title:contains('Technical Attributes')"
+        },
+        {
+          title: "Partner Mindset",
+          selector: ".category-title:contains('Partner Mindset')"
+        },
+        {
+          title: "Hygiene",
+          selector: ".category-title:contains('Hygiene')"
+        },
+        {
+          title: "Physical Attributes",
+          selector: ".category-title:contains('Physical Attributes')"
+        }
+      ];
+      
+      // Process each section independently
+      sections.forEach(section => {
+        // Find the section's category div
+        const categoryTitle = Array.from(document.querySelectorAll('.category-title'))
+          .find(el => el.textContent.includes(section.title));
+        if (!categoryTitle) return;
         
-        const x1 = parseFloat(dot1.style.left);
-        const y1 = dot1.offsetTop;
-        const x2 = parseFloat(dot2.style.left);
-        const y2 = dot2.offsetTop;
+        const categoryDiv = categoryTitle.closest('.category');
+        if (!categoryDiv) return;
         
-        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        const angle = Math.atan2(y2 - y1, x2 - x1);
+        // Get all visible dots within this specific category
+        const categoryDots = Array.from(categoryDiv.querySelectorAll('.dot')).filter(dot => 
+          dot.style.display === 'block'
+        );
         
-        const line = document.createElement('div');
-        line.className = 'connector-line';
-        line.style.width = `${length}px`;
-        line.style.transform = `rotate(${angle}rad)`;
-        line.style.left = `${x1}px`;
-        line.style.top = `${y1}px`;
-        
-        container.appendChild(line);
-      }
+        // Draw lines only between dots in this category
+        for (let i = 0; i < categoryDots.length - 1; i++) {
+          const dot1 = categoryDots[i];
+          const dot2 = categoryDots[i + 1];
+          
+          const rect1 = dot1.getBoundingClientRect();
+          const rect2 = dot2.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          
+          const x1 = rect1.left + rect1.width / 2 - containerRect.left;
+          const y1 = rect1.top + rect1.height / 2 - containerRect.top;
+          const x2 = rect2.left + rect2.width / 2 - containerRect.left;
+          const y2 = rect2.top + rect2.height / 2 - containerRect.top;
+          
+          const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+          const angle = Math.atan2(y2 - y1, x2 - x1);
+          
+          const line = document.createElement('div');
+          line.className = 'connector-line';
+          line.style.width = `${length}px`;
+          line.style.transform = `rotate(${angle}rad)`;
+          line.style.left = `${x1}px`;
+          line.style.top = `${y1}px`;
+          
+          container.appendChild(line);
+        }
+      });
     }
 
     async function saveChanges() {
