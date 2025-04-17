@@ -486,6 +486,7 @@
         margin-bottom: 20px;
     }
   </style>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="assessment-container">
@@ -514,6 +515,7 @@
               <option value="archetype:veteran">The Frail Old Guy/Veteran</option>
               <option value="archetype:professor">The Professor/Instructor</option>
               <option value="archetype:competitor">The Competitor</option>
+              <option value="archetype:stinky_troll">The Stinky Troll</option>
               <option value="archetype:chess_player">The Chess Player</option>
               <option value="archetype:natural_athlete">The Natural Athlete</option>
               <option value="archetype:hobbyist">The Hobbyist</option>
@@ -1593,6 +1595,62 @@
             }, 300);
         }
     }
+
+    // Add these functions to your existing JavaScript section
+    function saveToLocalStorage(profileId, values) {
+        const key = `saved_profile_${profileId}`;
+        localStorage.setItem(key, JSON.stringify(values));
+    }
+
+    function loadFromLocalStorage(profileId) {
+        const key = `saved_profile_${profileId}`;
+        const saved = localStorage.getItem(key);
+        return saved ? JSON.parse(saved) : null;
+    }
+
+    function exportAsImage() {
+        // Create a temporary canvas element
+        const element = document.querySelector('.assessment-container');
+        html2canvas(element).then(canvas => {
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'bjj-assessment.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    function exportProfile() {
+        const values = currentValues; // Use your existing currentValues object
+        const blob = new Blob([JSON.stringify(values, null, 2)], {type: 'application/json'});
+        const link = document.createElement('a');
+        link.download = 'bjj-profile.json';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+    }
+
+    function importProfile(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const values = JSON.parse(e.target.result);
+            updateBars(values);
+            saveToLocalStorage('custom', values);
+        };
+        reader.readAsText(file);
+    }
+
+    // Add this to your HTML where you want the export/import buttons
+    const exportControls = `
+        <div class="export-controls">
+            <button onclick="exportAsImage()">Save as Image</button>
+            <button onclick="exportProfile()">Export Profile</button>
+            <input type="file" id="importFile" accept=".json" style="display: none" 
+                   onchange="importProfile(this.files[0])">
+            <button onclick="document.getElementById('importFile').click()">
+                Import Profile
+            </button>
+        </div>
+    `;
   </script>
 </body>
 </html>

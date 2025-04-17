@@ -1,12 +1,19 @@
 # app.py
 from flask import Flask, render_template, jsonify, request, abort
 import json
-from functools import lru_cache
+from functools import lru_cache, wraps
 import os
 from pathlib import Path
 import random
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__, static_folder='images', static_url_path='/images')
+
+# Admin access control
+ADMIN_MODE = os.environ.get('ADMIN_MODE', 'false').lower() == 'true'
 
 # File paths
 CONFIG_DIR = Path('config')
@@ -15,6 +22,14 @@ ATTRIBUTES_FILE = CONFIG_DIR / 'attributes.json'
 TOOLTIPS_DIR = CONFIG_DIR / 'tooltips'
 PROFILES_FILE = DATA_DIR / 'profiles.json'
 ARCHETYPES_FILE = DATA_DIR / 'archetypal_profiles.json'
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not ADMIN_MODE:
+            return jsonify({"error": "Admin mode disabled"}), 403
+        return f(*args, **kwargs)
+    return decorated_function
 
 def ensure_directories():
     """Ensure all required directories exist"""
@@ -52,7 +67,6 @@ def get_default_values():
     
     return default_values
 
-# Cache for profiles
 @lru_cache()
 def load_profiles():
     ensure_directories()
@@ -61,14 +75,20 @@ def load_profiles():
     with open(PROFILES_FILE, 'r') as f:
         return json.load(f)
 
-# Add this function after ensure_data_directory()
 def create_default_archetypes():
     archetypes = {
-        "spazz": generate_archetype_values(high=["explosiveness", "strength", "cardio"], low=["controlledMovements", "controlledEgo", "safetyConsciousness"]),
-        "brute": generate_archetype_values(high=["strength", "gripStrength", "weight"], low=["flexibility", "mobility", "controlledMovements"]),
-        "veteran": generate_archetype_values(high=["depthOfKnowledge", "controlledMovements", "controlledEgo"], low=["explosiveness", "cardio", "strength"]),
-        "professor": generate_archetype_values(high=["depthOfKnowledge", "communicative", "feedbackReceptivity"], low=["explosiveness", "strength", "cardio"]),
-        "competitor": generate_archetype_values(high=["cardio", "explosiveness", "specificWork"], low=["controlledEgo", "friendlyAttitude", "communicative"])
+        "spazz": generate_archetype_values(high=["explosiveness", "strength", "cardio"], 
+                                         low=["controlledMovements", "controlledEgo", "safetyConsciousness"]),
+        "brute": generate_archetype_values(high=["strength", "gripStrength", "weight"], 
+                                         low=["flexibility", "mobility", "controlledMovements"]),
+        "veteran": generate_archetype_values(high=["depthOfKnowledge", "controlledMovements", "controlledEgo"], 
+                                          low=["explosiveness", "cardio", "strength"]),
+        "professor": generate_archetype_values(high=["depthOfKnowledge", "communicative", "feedbackReceptivity"], 
+                                            low=["explosiveness", "strength", "cardio"]),
+        "competitor": generate_archetype_values(high=["cardio", "explosiveness", "specificWork"], 
+                                             low=["controlledEgo", "friendlyAttitude", "communicative"]),
+        "stinky_troll": generate_archetype_values(high=["strength", "weight", "gripStrength"],
+                                                low=["hygiene", "personalCleanliness", "equipmentHygiene"])
     }
     return archetypes
 
@@ -108,55 +128,40 @@ def generate_archetype_values(high=None, low=None):
         "hygiene": random.randint(4, 7)
     }
     
-    # Set high values (8-10)
     if high:
         for attr in high:
             attributes[attr] = random.randint(8, 10)
     
-    # Set low values (1-3)
     if low:
         for attr in low:
             attributes[attr] = random.randint(1, 3)
     
     return attributes
 
-# Modify the load_archetypal_profiles function
 @lru_cache()
 def load_archetypal_profiles():
     ensure_directories()
-    print("\n=== Debug: Loading Archetypes ===")
-    print(f"Checking file: {ARCHETYPES_FILE}")
-    print(f"File exists: {ARCHETYPES_FILE.exists()}")
-    
     if not ARCHETYPES_FILE.exists():
-        print("File doesn't exist!")
         return {}
-        
     try:
         with open(ARCHETYPES_FILE, 'r') as f:
             data = json.load(f)
-            print(f"Loaded data keys: {list(data.keys())}")
             return data
     except Exception as e:
         print(f"Error loading file: {str(e)}")
         return {}
 
-# Save profiles to JSON file
 def save_profiles(profiles_data):
     ensure_directories()
     try:
-        # Create a temporary file first
         temp_file = PROFILES_FILE.with_suffix('.tmp')
         with open(temp_file, 'w') as f:
             json.dump(profiles_data, f, indent=4)
-        
-        # Then rename it to the actual file (atomic operation)
         temp_file.replace(PROFILES_FILE)
     except Exception as e:
         print(f"Error saving profiles: {str(e)}")
         raise
 
-# Update clear_caches to include new functions
 def clear_caches():
     load_profiles.cache_clear()
     load_archetypal_profiles.cache_clear()
@@ -166,20 +171,23 @@ def clear_caches():
 def save_archetypes(archetypes_data):
     ensure_directories()
     try:
-        # Create a temporary file first
         temp_file = ARCHETYPES_FILE.with_suffix('.tmp')
         with open(temp_file, 'w') as f:
             json.dump(archetypes_data, f, indent=4)
-        
-        # Then rename it to the actual file (atomic operation)
         temp_file.replace(ARCHETYPES_FILE)
     except Exception as e:
         print(f"Error saving archetypes: {str(e)}")
         raise
 
+# Routes
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/admin')
+@admin_required
+def admin_panel():
+    return render_template('admin.html')
 
 @app.route('/api/profiles')
 def get_profiles():
@@ -212,7 +220,6 @@ def create_profile():
             else:
                 return jsonify({"error": "Archetype not found"}), 404
         else:
-            # Create empty profile with default values from config
             profiles[profile_name] = get_default_values()
 
         save_profiles(profiles)
@@ -226,40 +233,23 @@ def get_archetypes():
     return jsonify(load_archetypal_profiles())
 
 @app.route('/api/archetypes/<archetype_name>')
-def get_specific_archetype(archetype_name):
-    print(f"\n=== Debug: Archetype Request ===")
-    print(f"Requested archetype: {archetype_name}")
-    
+def get_archetype(archetype_name):
     archetypes = load_archetypal_profiles()
-    print(f"Available archetypes: {list(archetypes.keys())}")
-    
-    result = archetypes.get(archetype_name, {})
-    print(f"Found data: {result}")
-    print("===============================\n")
-    return jsonify(result)
+    if archetype_name not in archetypes:
+        return jsonify({"error": "Archetype not found"}), 404
+    return jsonify(archetypes[archetype_name])
 
-@app.route('/api/archetypes/<archetype_name>', methods=['POST'])
-def update_archetype(archetype_name):
+@app.route('/api/admin/archetypes/<archetype_name>', methods=['POST'])
+@admin_required
+def admin_update_archetype(archetype_name):
     try:
-        archetypes = load_archetypal_profiles()
-        if archetype_name not in archetypes:
-            abort(404)
-        
         data = request.json
-        # Preserve metadata if it exists
-        if 'metadata' in archetypes[archetype_name]:
-            metadata = archetypes[archetype_name]['metadata']
-            archetypes[archetype_name].update(data)
-            archetypes[archetype_name]['metadata'] = metadata
-        else:
-            archetypes[archetype_name].update(data)
-        
+        archetypes = load_archetypal_profiles()
+        archetypes[archetype_name] = data
         save_archetypes(archetypes)
         clear_caches()
-        
-        return jsonify(archetypes[archetype_name])
+        return jsonify({"status": "success"})
     except Exception as e:
-        print(f"Error updating archetype: {str(e)}")  # Server-side logging
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/profiles/<profile_name>', methods=['POST'])
@@ -267,22 +257,16 @@ def update_profile(profile_name):
     try:
         profiles = load_profiles()
         data = request.json
-        
-        # Update existing profile or create new one
         profiles[profile_name] = data
-        
-        # Save to file
         save_profiles(profiles)
-        clear_caches()  # Clear cache to ensure fresh data on next load
-        
+        clear_caches()
         return jsonify(profiles[profile_name])
     except Exception as e:
-        print(f"Error updating profile: {str(e)}")  # Server-side logging
+        print(f"Error updating profile: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/config')
 def get_config():
-    """Get full configuration including attributes and tooltips"""
     lang = request.args.get('lang', 'en')
     return jsonify({
         'attributes': load_attributes_config(),
