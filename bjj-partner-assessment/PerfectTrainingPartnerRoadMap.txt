@@ -1,1 +1,76 @@
-flask==2.3.3
+PERFECT TRAINING PARTNER ROADMAP
+
+VERSION 1 (Current - Partner Impact)
+✓ Basic assessment functionality
+✓ Partner impact metrics
+✓ Archetype profiles
+✓ Visual connecting lines between metrics
+✓ Tooltips and descriptions
+
+VERSION 2 (Planned - Multi-Page Structure)
+1. Architecture Updates
+   - Create base template structure
+   - Move current assessment to partner_impact.html
+   - Implement navigation system
+   - Set up static file organization (CSS/JS)
+
+2. Individual Performance Section
+   - New page with "Be the Best Version of Yourself" tagline
+   - Remove Hygiene from Individual Performance
+   - Move Physical Attributes to new section
+
+3. Technical Assessment Pages
+   Each with unique title and tagline:
+   a) Submissions
+      - Strangles (RNC, Guillotine, Triangle variations, etc.)
+      - Arms/Shoulder locks (Armbars, Americana, etc.)
+      - Leg Attacks (Ankle locks, Kneebar, etc.)
+   
+   b) Position Control
+      - Guards
+      - Guard Passes
+      - Pin Control
+      - Takedowns
+
+   c) Movement & Attributes
+      - Fundamental Movements
+      - Cognitive Abilities
+      - Connection
+
+4. Data Structure
+   - JSON-based assessment data
+   - Separate configuration files for each section
+   - Tooltips and descriptions database
+
+5. User Experience
+   - Consistent navigation
+   - Progress tracking
+   - Mobile responsiveness
+   - Loading states
+
+VERSION 3 (Future Features)
+1. User Profiles & Progress Tracking
+2. Training Recommendations
+3. Video Integration
+4. Peer Reviews
+5. Custom Assessment Creation
+6. Multi-language Support (Japanese priority)
+7. Analytics Dashboard
+8. Training Plan Generation
+
+TECHNICAL DEBT & IMPROVEMENTS
+1. Code Organization
+   - Separate CSS/JS files
+   - Template inheritance
+   - Component reusability
+
+2. Performance Optimization
+   - Asset bundling
+   - Lazy loading
+   - Cache management
+
+3. Testing & Documentation
+   - Unit tests
+   - Integration tests
+   - User documentation
+   - API documentation

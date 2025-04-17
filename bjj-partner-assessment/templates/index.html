@@ -5,6 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Be the Perfect Training Partner</title>
+  <script>
+    // Feature flags for version control
+    const FEATURES = {
+        INDIVIDUAL_PERFORMANCE: false,  // Set to true to enable Individual Performance section
+        COMING_SOON: {
+            SUBMISSIONS: false,
+            POSITION_CONTROL: false,
+            MOVEMENT_ATTRIBUTES: false
+        }
+    };
+  </script>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -449,191 +460,191 @@
             <h2 class="major-category-title">Partner Impact</h2>
             <p class="major-category-tagline">These influence how helpful you are to others as a training partner</p>
             
-            <!-- Technical Attributes -->
-            <div class="category">
-                <div class="category-title">Technical Attributes</div>
+        <!-- Technical Attributes -->
+        <div class="category">
+          <div class="category-title">Technical Attributes</div>
                 <div class="attribute" data-tooltip="Practice controlled movements by starting at 50% speed and focusing on precision over power">
-                    <div class="attribute-name">Controlled Movements</div>
+            <div class="attribute-name">Controlled Movements</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="controlledMovements" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="controlledMovements" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
+            </div>
+          </div>
                 <div class="attribute" data-tooltip="Always give your partner time to tap, and release immediately when they do">
-                    <div class="attribute-name">Controlled Submissions</div>
+            <div class="attribute-name">Controlled Submissions</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="controlledSubmissions" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="controlledSubmissions" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
-                    <div class="attribute-name">Modular Intensity</div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Modular Intensity</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="modularIntensity" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="modularIntensity" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
-                    <div class="attribute-name">Depth of Knowledge</div>
+            </div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">Depth of Knowledge</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="depthOfKnowledge" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="depthOfKnowledge" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Injury Knowledge</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="injuryKnowledge" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="injuryKnowledge" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Specific Work</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="specificWork" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="specificWork" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
             </div>
-
+          </div>
+        </div>
+        
             <!-- Mindset - Partner Related -->
-            <div class="category">
+        <div class="category">
                 <div class="category-title">Partner Mindset</div>
                 <div class="attribute" data-tooltip="Keep your ego in check by focusing on learning rather than winning during training">
-                    <div class="attribute-name">Controlled Ego</div>
+            <div class="attribute-name">Controlled Ego</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="controlledEgo" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="controlledEgo" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Friendly Attitude</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="friendlyAttitude" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="friendlyAttitude" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">R&D Mindset</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="rdMindset" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="rdMindset" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Not Overtalking</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="notOvertalking" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="notOvertalking" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Communicative</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="communicative" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="communicative" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Feedback Receptivity</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="feedbackReceptivity" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="feedbackReceptivity" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Safety Consciousness</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="safetyConsciousness" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="safetyConsciousness" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Recovery Awareness</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="recoveryAwareness" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="recoveryAwareness" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-                <div class="attribute">
+            </div>
+          </div>
+          <div class="attribute">
                     <div class="attribute-name">Identify Weaknesses</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
-                        <div class="bar" data-attribute="identifyWeaknesses" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
+              <div class="bar" data-attribute="identifyWeaknesses" style="width: 0%"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
                     </div>
                 </div>
@@ -647,27 +658,27 @@
                         <div class="score-label">0</div>
                         <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
             </div>
-
+          </div>
+        </div>
+        
             <!-- New Hygiene section -->
-            <div class="category">
+        <div class="category">
                 <div class="category-title">Hygiene</div>
                 
                 <div class="attribute" data-tooltip="Body odor, Clean Feet, Showering Habits, Dental Hygiene">
                     <div class="attribute-name">Personal Cleanliness</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
                         <div class="bar" data-attribute="personalCleanliness" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
-
+            </div>
+          </div>
+          
                 <div class="attribute" data-tooltip="Trimmed nails to avoid scratches and cuts, and painful inverted nail injuries">
                     <div class="attribute-name">Nail Care</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
@@ -710,7 +721,7 @@
         </div>
 
         <!-- Individual Performance Section -->
-        <div class="major-category">
+        <div class="major-category" id="individualPerformance" style="display: none;">
             <h2 class="major-category-title">Individual Performance</h2>
             <p class="major-category-tagline">These influence how effective you are as a grappler</p>
             
@@ -729,18 +740,18 @@
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
                     </div>
                 </div>
-                <div class="attribute">
+          <div class="attribute">
                     <div class="attribute-name">Flexibility</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
                         <div class="bar" data-attribute="flexibility" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
+            </div>
+          </div>
                 <div class="attribute">
                     <div class="attribute-name">Mobility</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
@@ -751,7 +762,7 @@
                         <div class="score-label">0</div>
                         <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
+        </div>
                 </div>
                 <div class="attribute">
                     <div class="attribute-name">Weight</div>
@@ -983,7 +994,7 @@
               dots.forEach(dot => dot.style.display = 'block');
               
               // Draw lines between consecutive dots
-              for (let i = 0; i < dots.length - 1; i++) {
+      for (let i = 0; i < dots.length - 1; i++) {
                   const dot1 = dots[i];
                   const dot2 = dots[i + 1];
                   
@@ -998,20 +1009,20 @@
                   const y2 = rect2.top + (rect2.height / 2) - containerRect.top;
                   
                   // Calculate line properties
-                  const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
                   const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
-                  
+        
                   // Create and position the line
-                  const line = document.createElement('div');
-                  line.className = 'connector-line';
-                  line.style.width = `${length}px`;
-                  line.style.left = `${x1}px`;
+        const line = document.createElement('div');
+        line.className = 'connector-line';
+        line.style.width = `${length}px`;
+        line.style.left = `${x1}px`;
                   line.style.top = `${y1}px`;
-                  line.style.transform = `rotate(${angle}deg)`;
-                  
-                  container.appendChild(line);
+        line.style.transform = `rotate(${angle}deg)`;
+        
+        container.appendChild(line);
                   console.log(`Drew line in ${section.textContent.trim()}: length=${length}, angle=${angle}`);
-              }
+      }
           });
       });
     }
@@ -1430,6 +1441,24 @@
         'data-tooltip',
         "This includes personal physical or technical traits that enhance your own skills but don't necessarily affect your partner—grip strength, cardio, explosiveness, flexibility, mobility, weight, coordination, reaction time, and constitution. These are more about your own capabilities on the mat, which are key for grappling but don't directly dictate your partner's experience. Except that get smeshed or not."
     );
+
+    // Initialize feature flags
+    document.addEventListener('DOMContentLoaded', function() {
+        // Individual Performance section
+        const individualPerformance = document.getElementById('individualPerformance');
+        if (FEATURES.INDIVIDUAL_PERFORMANCE && individualPerformance) {
+            individualPerformance.style.display = 'block';
+        }
+        
+        // Update attributes array to exclude Individual Performance metrics when disabled
+        if (!FEATURES.INDIVIDUAL_PERFORMANCE) {
+            attributes = attributes.filter(attr => 
+                !['gripStrength', 'flexibility', 'mobility', 'weight', 'cardio',
+                  'explosiveness', 'coordination', 'reactionTime', 'constitution',
+                  'hygiene'].includes(attr)
+            );
+        }
+    });
   </script>
 </body>
 </html>
