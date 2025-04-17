@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import random
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='images', static_url_path='/images')
 
 # File paths
 CONFIG_DIR = Path('config')

@@ -450,34 +450,78 @@
       text-align: left;
       padding-left: 20px;
     }
+
+    .header-container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .title-left {
+        text-align: right;
+        padding-right: 20px;
+    }
+    .title-right {
+        text-align: left;
+        padding-left: 20px;
+    }
+    .main-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .subtitle {
+        font-style: italic;
+        color: #666;
+    }
+    .archetype-image {
+        width: auto;
+        height: 350px;
+        margin: 0 20px;
+        transition: opacity 0.3s ease;
+    }
+    .profile-select-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="assessment-container">
-    <div class="title-container">
-      <h1 class="main-title">Perfect Training Partner</h1>
-      <div class="subtitle">be the one you wish you had</div>
+    <div class="header-container">
+        <div class="title-left">
+            <div class="main-title">PERFECT<br>TRAINING<br>PARTNER</div>
+            <div class="subtitle">BE THE ONE YOU WISH YOU HAD</div>
+        </div>
+        <div class="image-container">
+            <img id="archetype-image" class="archetype-image" src="" alt="Archetype Image">
+        </div>
+        <div class="title-right">
+            <div class="main-title">最適な<br>練習仲間</div>
+            <div class="subtitle">自分が望んだ存在になる</div>
+        </div>
     </div>
-    
-    <div class="person-select">
+
+    <div class="profile-select-container">
       <select id="personSelect">
         <option value="self">Self Assessment</option>
         <option value="partner1">Training Partner 1</option>
         <option value="partner2">Training Partner 2</option>
-        <optgroup label="Archetypal Profiles">
-          <option value="archetype:spazz">The Spazz</option>
-          <option value="archetype:brute">The Brute/Gorilla</option>
-          <option value="archetype:veteran">The Frail Old Guy/Veteran</option>
-          <option value="archetype:professor">The Professor/Instructor</option>
-          <option value="archetype:competitor">The Competitor</option>
-          <option value="archetype:chess_player">The Chess Player</option>
-          <option value="archetype:natural_athlete">The Natural Athlete</option>
-          <option value="archetype:hobbyist">The Hobbyist</option>
-          <option value="archetype:flaky_talent">The Flaky Talent</option>
-          <option value="archetype:injury_collector">The Injury Collector</option>
-          <option value="archetype:one_trick_pony">The One-Trick Pony</option>
-          <option value="archetype:gear_obsessive">The Gear Obsessive</option>
-        </optgroup>
+            <optgroup label="Archetypal Profiles">
+              <option value="archetype:spazz">The Spazz</option>
+              <option value="archetype:brute">The Brute/Gorilla</option>
+              <option value="archetype:veteran">The Frail Old Guy/Veteran</option>
+              <option value="archetype:professor">The Professor/Instructor</option>
+              <option value="archetype:competitor">The Competitor</option>
+              <option value="archetype:chess_player">The Chess Player</option>
+              <option value="archetype:natural_athlete">The Natural Athlete</option>
+              <option value="archetype:hobbyist">The Hobbyist</option>
+              <option value="archetype:flaky_talent">The Flaky Talent</option>
+              <option value="archetype:injury_collector">The Injury Collector</option>
+              <option value="archetype:one_trick_pony">The One-Trick Pony</option>
+              <option value="archetype:gear_obsessive">The Gear Obsessive</option>
+            </optgroup>
       </select>
     </div>
     
@@ -1084,25 +1128,25 @@
           
           const rect1 = dot1.getBoundingClientRect();
           const rect2 = dot2.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-          
+      const containerRect = container.getBoundingClientRect();
+      
           const x1 = rect1.left + rect1.width / 2 - containerRect.left;
           const y1 = rect1.top + rect1.height / 2 - containerRect.top;
           const x2 = rect2.left + rect2.width / 2 - containerRect.left;
           const y2 = rect2.top + rect2.height / 2 - containerRect.top;
-          
-          const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        
+        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
           const angle = Math.atan2(y2 - y1, x2 - x1);
-          
-          const line = document.createElement('div');
-          line.className = 'connector-line';
-          line.style.width = `${length}px`;
+        
+        const line = document.createElement('div');
+        line.className = 'connector-line';
+        line.style.width = `${length}px`;
           line.style.transform = `rotate(${angle}rad)`;
-          line.style.left = `${x1}px`;
+        line.style.left = `${x1}px`;
           line.style.top = `${y1}px`;
-          
-          container.appendChild(line);
-        }
+        
+        container.appendChild(line);
+      }
       });
     }
     
@@ -1146,6 +1190,9 @@
         } else if (archetypeInfo) {
           archetypeInfo.style.display = 'none';
         }
+
+        // Add this function to update the image when profile changes
+        updateArchetypeImage(profileId);
       } catch (error) {
         console.error('Error loading profile:', error);
         alert('Error loading profile: ' + error.message);
@@ -1512,6 +1559,40 @@
             );
         }
     });
+
+    // Add this function to update the image when profile changes
+    function updateArchetypeImage(profileId) {
+        const imageElement = document.getElementById('archetype-image');
+        if (profileId.startsWith('archetype:')) {
+            const archetypeName = profileId.split(':')[1].toLowerCase();
+            // Map the archetype name to the corresponding image file
+            const imageMap = {
+                'spazz': 'PTP_TheSpaz_256x.png',
+                'brute': 'PTP_TheBrute256x.png',
+                'injury_collector': 'PTP_ChimpInjuryCollector256x.png',
+                'stinky_troll': 'PTP_StinkyTroll256x.png'
+            };
+            const imageName = imageMap[archetypeName];
+            if (imageName) {
+                imageElement.src = `images/${imageName}`;
+                imageElement.style.display = 'block';
+                imageElement.style.opacity = '1';
+                console.log('Updated image:', imageName); // Debug log
+            } else {
+                console.log('No image found for archetype:', archetypeName); // Debug log
+                imageElement.style.opacity = '0';
+                setTimeout(() => {
+                    imageElement.style.display = 'none';
+                }, 300);
+            }
+        } else {
+            console.log('Not an archetype profile:', profileId); // Debug log
+            imageElement.style.opacity = '0';
+            setTimeout(() => {
+                imageElement.style.display = 'none';
+            }, 300);
+        }
+    }
   </script>
 </body>
 </html>
