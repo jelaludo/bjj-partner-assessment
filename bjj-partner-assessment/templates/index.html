@@ -39,30 +39,46 @@
       margin-bottom: 30px;
     }
     .category-title {
+      display: flex;
+      justify-content: space-between;
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
       color: #444;
       border-bottom: 2px solid #ddd;
-      padding-bottom: 5px;
+      padding: 0 20px 5px 20px;
+    }
+    .category-title .en {
+      width: 30%;
+      text-align: right;
+      padding-right: 20px;
+    }
+    .category-title .spacer {
+      width: 35%;
+    }
+    .category-title .jp {
+      width: 30%;
+      text-align: left;
+      padding-left: 20px;
     }
     .attribute {
       display: flex;
       align-items: center;
       margin-bottom: 15px;
+      padding: 0 20px;
     }
     .attribute-name {
-      width: 35%;
-      font-weight: 500;
-      padding-right: 15px;
+      width: 30%;
+      text-align: right;
+      padding-right: 20px;
     }
     .bar-container {
+      width: 35%;
       position: relative;
       height: 25px;
       background-color: #eee;
       border-radius: 4px;
       overflow: hidden;
-      flex-grow: 1;
     }
     .zone {
       position: absolute;
@@ -363,10 +379,25 @@
     }
 
     .major-category-title {
-        font-size: 1.8em;
-        color: #2c3e50;
-        margin-bottom: 5px;
-        cursor: help;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .major-category-title .en {
+        width: 30%;
+        text-align: right;
+        padding-right: 20px;
+    }
+
+    .major-category-title .spacer {
+        width: 35%;
+    }
+
+    .major-category-title .jp {
+        width: 30%;
+        text-align: left;
+        padding-left: 20px;
     }
 
     .major-category-tagline {
@@ -413,6 +444,12 @@
         border-color: rgba(44, 62, 80, 0.95) transparent transparent transparent;
         z-index: 1000;
     }
+
+    .jp-text {
+      width: 30%;
+      text-align: left;
+      padding-left: 20px;
+    }
   </style>
 </head>
 <body>
@@ -457,91 +494,109 @@
       <div id="assessmentData">
         <!-- Partner Impact Section -->
         <div class="major-category">
-            <h2 class="major-category-title">Partner Impact</h2>
+            <div class="major-category-title">
+                <span class="en">Partner Impact</span>
+                <span class="spacer"></span>
+                <span class="jp">技術的属性</span>
+            </div>
             <p class="major-category-tagline">These influence how helpful you are to others as a training partner</p>
             
         <!-- Technical Attributes -->
         <div class="category">
-          <div class="category-title">Technical Attributes</div>
-                <div class="attribute" data-tooltip="Practice controlled movements by starting at 50% speed and focusing on precision over power">
-            <div class="attribute-name">Controlled Movements</div>
-                    <div class="bar-container" onclick="handleBarClick(event, this)">
+          <div class="category-title">
+            <span class="en">Technical Attributes</span>
+            <span class="spacer"></span>
+            <span class="jp">技術的属性</span>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">controlled movements</div>
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="controlledMovements" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
-                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+            <div class="jp-text">暴れない動き</div>
           </div>
-                <div class="attribute" data-tooltip="Always give your partner time to tap, and release immediately when they do">
-            <div class="attribute-name">Controlled Submissions</div>
-                    <div class="bar-container" onclick="handleBarClick(event, this)">
+          <div class="attribute">
+            <div class="attribute-name">controlled submissions</div>
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="controlledSubmissions" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
-                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+            <div class="jp-text">暴れない極め技</div>
           </div>
           <div class="attribute">
-            <div class="attribute-name">Modular Intensity</div>
-                    <div class="bar-container" onclick="handleBarClick(event, this)">
+            <div class="attribute-name">modular intensity</div>
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="modularIntensity" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
-                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+            <div class="jp-text">緩急自在、剛柔自在</div>
           </div>
           <div class="attribute">
-            <div class="attribute-name">Depth of Knowledge</div>
-                    <div class="bar-container" onclick="handleBarClick(event, this)">
+            <div class="attribute-name">depth of knowledge</div>
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="depthOfKnowledge" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
-                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+            <div class="jp-text">知識の深さ</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Injury Knowledge</div>
-                    <div class="bar-container" onclick="handleBarClick(event, this)">
+            <div class="attribute-name">injury knowledge</div>
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
               <div class="bar" data-attribute="injuryKnowledge" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
-                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+            <div class="jp-text">怪我の知識</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Specific Work</div>
-                    <div class="bar-container" onclick="handleBarClick(event, this)">
+            <div class="attribute-name">specific "look" ability</div>
+            <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
-              <div class="bar" data-attribute="specificWork" style="width: 0%"></div>
+              <div class="bar" data-attribute="specificLookAbility" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
-                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+              <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+            <div class="jp-text">相手再現力</div>
           </div>
         </div>
         
             <!-- Mindset - Partner Related -->
         <div class="category">
-                <div class="category-title">Partner Mindset</div>
-                <div class="attribute" data-tooltip="Keep your ego in check by focusing on learning rather than winning during training">
-            <div class="attribute-name">Controlled Ego</div>
+                <div class="category-title">
+                    <span class="en">Training Mindset</span>
+                    <span class="spacer"></span>
+                    <span class="jp">練習思考</span>
+                </div>
+          <div class="attribute">
+                    <div class="attribute-name">controlled ego</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -551,9 +606,10 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">感情自主</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Friendly Attitude</div>
+                    <div class="attribute-name">friendly attitude</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -563,9 +619,10 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">友好的な態度</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">R&D Mindset</div>
+                    <div class="attribute-name">R&D mindset</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -575,21 +632,23 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">研究鍛錬思考</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Not Overtalking</div>
+                    <div class="attribute-name">practice vs overtalking</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
               <div class="zone zone-green"></div>
-              <div class="bar" data-attribute="notOvertalking" style="width: 0%"></div>
+                        <div class="bar" data-attribute="practiceVsOvertalking" style="width: 0%"></div>
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">言葉より感覚</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Communicative</div>
+                    <div class="attribute-name">communicative</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -599,9 +658,10 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">対話力</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Feedback Receptivity</div>
+                    <div class="attribute-name">feedback receptivity</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -611,9 +671,10 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">助言受容</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Safety Consciousness</div>
+                    <div class="attribute-name">safety consciousness</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -623,9 +684,10 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">安全意識</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Recovery Awareness</div>
+                    <div class="attribute-name">recovery awareness</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -635,9 +697,10 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">疲労回復意識</div>
           </div>
           <div class="attribute">
-                    <div class="attribute-name">Identify Weaknesses</div>
+                    <div class="attribute-name">identify weaknesses</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -646,10 +709,11 @@
               <div class="score-label">0</div>
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
+            </div>
+                    <div class="jp-text">改善点の発見力</div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Reliability</div>
+                    <div class="attribute-name">reliability</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -658,16 +722,22 @@
                         <div class="score-label">0</div>
                         <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-            </div>
+                    </div>
+                    <div class="jp-text">信頼性、信憑性</div>
+                </div>
           </div>
         </div>
         
             <!-- New Hygiene section -->
         <div class="category">
-                <div class="category-title">Hygiene</div>
-                
-                <div class="attribute" data-tooltip="Body odor, Clean Feet, Showering Habits, Dental Hygiene">
-                    <div class="attribute-name">Personal Cleanliness</div>
+                <div class="category-title">
+                    <span class="en">Hygiene</span>
+                    <span class="spacer"></span>
+                    <span class="jp">衛生</span>
+                </div>
+          
+          <div class="attribute">
+                    <div class="attribute-name">personal cleanliness</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -677,23 +747,25 @@
               <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
             </div>
+                    <div class="jp-text">個人清潔</div>
           </div>
           
-                <div class="attribute" data-tooltip="Trimmed nails to avoid scratches and cuts, and painful inverted nail injuries">
-                    <div class="attribute-name">Nail Care</div>
+          <div class="attribute">
+                    <div class="attribute-name">nail care</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
-                        <div class="zone zone-red"></div>
-                        <div class="zone zone-yellow"></div>
-                        <div class="zone zone-green"></div>
+              <div class="zone zone-red"></div>
+              <div class="zone zone-yellow"></div>
+              <div class="zone zone-green"></div>
                         <div class="bar" data-attribute="nailCare" style="width: 0%"></div>
-                        <div class="score-label">0</div>
-                        <div class="dot" style="display: none;"></div>
+              <div class="score-label">0</div>
+              <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
+            </div>
+                    <div class="jp-text">爪のケア</div>
+          </div>
 
-                <div class="attribute" data-tooltip="Clean gi and rashguard to prevent infections like ringworm or staph">
-                    <div class="attribute-name">Equipment Hygiene</div>
+                <div class="attribute">
+                    <div class="attribute-name">equipment hygiene</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -702,11 +774,12 @@
                         <div class="score-label">0</div>
                         <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
-                    </div>
-                </div>
+        </div>
+                    <div class="jp-text">設備衛生</div>
+      </div>
 
-                <div class="attribute" data-tooltip="A fresh breath is key when you're sometimes literally breathing down their neck. Brush those teeth and get some mints.">
-                    <div class="attribute-name">Dental Hygiene</div>
+                <div class="attribute">
+                    <div class="attribute-name">dental hygiene</div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -716,6 +789,7 @@
                         <div class="dot" style="display: none;"></div>
                         <input type="number" class="edit-input" min="0" max="10" style="display: none;">
                     </div>
+                    <div class="jp-text">口腔衛生</div>
                 </div>
             </div>
         </div>
@@ -729,7 +803,10 @@
             <div class="category">
                 <div class="category-title">Physical Attributes</div>
                 <div class="attribute" data-tooltip="Practice passive hanging for 30 seconds per day to start, and slowly ramp up the time, then switch to one-handed hangs">
-                    <div class="attribute-name">Grip Strength</div>
+                    <div class="attribute-name">
+                      <span class="en">grip strength</span>
+                      <span class="jp">握力</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -741,7 +818,10 @@
                     </div>
                 </div>
           <div class="attribute">
-                    <div class="attribute-name">Flexibility</div>
+                    <div class="attribute-name">
+                      <span class="en">flexibility</span>
+                      <span class="jp">柔軟性</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
               <div class="zone zone-red"></div>
               <div class="zone zone-yellow"></div>
@@ -753,7 +833,10 @@
             </div>
           </div>
                 <div class="attribute">
-                    <div class="attribute-name">Mobility</div>
+                    <div class="attribute-name">
+                      <span class="en">mobility</span>
+                      <span class="jp">モビリティ</span>
+        </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -765,7 +848,10 @@
         </div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Weight</div>
+                    <div class="attribute-name">
+                      <span class="en">weight</span>
+                      <span class="jp">体重</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -777,7 +863,10 @@
                     </div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Cardio</div>
+                    <div class="attribute-name">
+                      <span class="en">cardio</span>
+                      <span class="jp">カーディオ</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -789,7 +878,10 @@
                     </div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Explosiveness</div>
+                    <div class="attribute-name">
+                      <span class="en">explosiveness</span>
+                      <span class="jp">爆発力</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -801,7 +893,10 @@
                     </div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Coordination</div>
+                    <div class="attribute-name">
+                      <span class="en">coordination</span>
+                      <span class="jp">コーディネーション</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -813,7 +908,10 @@
                     </div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Reaction Time</div>
+                    <div class="attribute-name">
+                      <span class="en">reaction time</span>
+                      <span class="jp">反応時間</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -825,7 +923,10 @@
                     </div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Constitution</div>
+                    <div class="attribute-name">
+                      <span class="en">constitution</span>
+                      <span class="jp">体質</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -837,7 +938,10 @@
                     </div>
                 </div>
                 <div class="attribute">
-                    <div class="attribute-name">Hygiene</div>
+                    <div class="attribute-name">
+                      <span class="en">hygiene</span>
+                      <span class="jp">ヒュゲイン</span>
+                    </div>
                     <div class="bar-container" onclick="handleBarClick(event, this)">
                         <div class="zone zone-red"></div>
                         <div class="zone zone-yellow"></div>
@@ -951,79 +1055,66 @@
     
     // Function to draw connector lines between dots
     function drawConnectorLines() {
-      console.log('Drawing lines...');
       const container = document.getElementById('patternContainer');
-      if (!container) {
-          console.error('Pattern container not found!');
-          return;
-      }
       
-      // Clear existing lines
+      // Remove existing lines
       container.querySelectorAll('.connector-line').forEach(line => line.remove());
       
-      // Define our sections
-      const sectionSelectors = [
-          '.category-title:contains("Technical Attributes")',
-          '.category-title:contains("Partner Mindset")',
-          '.category-title:contains("Hygiene")',
-          '.category-title:contains("Physical Attributes")'
+      // Show dots for all attributes with values and store their positions
+      const allDots = Array.from(document.querySelectorAll('.dot')).filter(dot => {
+        const scoreLabel = dot.previousElementSibling;
+        const hasValue = scoreLabel && scoreLabel.textContent !== '';
+        if (hasValue) {
+          dot.style.display = 'block';
+        }
+        return hasValue;
+      });
+      
+      // Define the major categories
+      const categories = [
+        "Partner Impact",
+        "Individual Performance"
       ];
       
-      sectionSelectors.forEach(selector => {
-          // Find the section
-          const sections = Array.from(document.querySelectorAll('.category-title'))
-              .filter(el => el.textContent.includes(selector.split('contains("')[1].split('")')[0]));
-              
-          sections.forEach(section => {
-              const categoryDiv = section.closest('.category');
-              if (!categoryDiv) {
-                  console.error('Category div not found for', selector);
-                  return;
-              }
-              
-              // Get all dots in this category that have a value
-              const dots = Array.from(categoryDiv.querySelectorAll('.dot'))
-                  .filter(dot => {
-                      const scoreLabel = dot.previousElementSibling;
-                      return scoreLabel && scoreLabel.textContent !== '';
-                  });
-              
-              console.log(`Found ${dots.length} dots in ${section.textContent.trim()}`);
-              
-              // Make all valid dots visible
-              dots.forEach(dot => dot.style.display = 'block');
-              
-              // Draw lines between consecutive dots
-      for (let i = 0; i < dots.length - 1; i++) {
-                  const dot1 = dots[i];
-                  const dot2 = dots[i + 1];
-                  
-                  const rect1 = dot1.getBoundingClientRect();
-                  const rect2 = dot2.getBoundingClientRect();
-                  const containerRect = container.getBoundingClientRect();
-                  
-                  // Calculate positions relative to container
-                  const x1 = rect1.left + (rect1.width / 2) - containerRect.left;
-                  const y1 = rect1.top + (rect1.height / 2) - containerRect.top;
-                  const x2 = rect2.left + (rect2.width / 2) - containerRect.left;
-                  const y2 = rect2.top + (rect2.height / 2) - containerRect.top;
-                  
-                  // Calculate line properties
-        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                  const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+      // Process each major category
+      categories.forEach(categoryName => {
+        const categorySection = Array.from(document.querySelectorAll('.major-category-title'))
+          .find(el => el.textContent.includes(categoryName))
+          ?.closest('.major-category');
         
-                  // Create and position the line
+        if (!categorySection) return;
+        
+        // Get all visible dots within this major category
+        const categoryDots = allDots.filter(dot => 
+          categorySection.contains(dot)
+        );
+        
+        // Draw lines between consecutive dots
+        for (let i = 0; i < categoryDots.length - 1; i++) {
+          const dot1 = categoryDots[i];
+          const dot2 = categoryDots[i + 1];
+          
+          const rect1 = dot1.getBoundingClientRect();
+          const rect2 = dot2.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          
+          const x1 = rect1.left + rect1.width / 2 - containerRect.left;
+          const y1 = rect1.top + rect1.height / 2 - containerRect.top;
+          const x2 = rect2.left + rect2.width / 2 - containerRect.left;
+          const y2 = rect2.top + rect2.height / 2 - containerRect.top;
+        
+        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+          const angle = Math.atan2(y2 - y1, x2 - x1);
+        
         const line = document.createElement('div');
         line.className = 'connector-line';
         line.style.width = `${length}px`;
+          line.style.transform = `rotate(${angle}rad)`;
         line.style.left = `${x1}px`;
-                  line.style.top = `${y1}px`;
-        line.style.transform = `rotate(${angle}deg)`;
+          line.style.top = `${y1}px`;
         
         container.appendChild(line);
-                  console.log(`Drew line in ${section.textContent.trim()}: length=${length}, angle=${angle}`);
       }
-          });
       });
     }
     
@@ -1278,50 +1369,36 @@
       // Remove existing lines
       container.querySelectorAll('.connector-line').forEach(line => line.remove());
       
-      // Show dots for all attributes with values
-      document.querySelectorAll('.dot').forEach(dot => {
+      // Show dots for all attributes with values and store their positions
+      const allDots = Array.from(document.querySelectorAll('.dot')).filter(dot => {
         const scoreLabel = dot.previousElementSibling;
-        if (scoreLabel && scoreLabel.textContent !== '') {
+        const hasValue = scoreLabel && scoreLabel.textContent !== '';
+        if (hasValue) {
           dot.style.display = 'block';
         }
+        return hasValue;
       });
       
-      // Define the sections we want to connect
-      const sections = [
-        {
-          title: "Technical Attributes",
-          selector: ".category-title:contains('Technical Attributes')"
-        },
-        {
-          title: "Partner Mindset",
-          selector: ".category-title:contains('Partner Mindset')"
-        },
-        {
-          title: "Hygiene",
-          selector: ".category-title:contains('Hygiene')"
-        },
-        {
-          title: "Physical Attributes",
-          selector: ".category-title:contains('Physical Attributes')"
-        }
+      // Define the major categories
+      const categories = [
+        "Partner Impact",
+        "Individual Performance"
       ];
       
-      // Process each section independently
-      sections.forEach(section => {
-        // Find the section's category div
-        const categoryTitle = Array.from(document.querySelectorAll('.category-title'))
-          .find(el => el.textContent.includes(section.title));
-        if (!categoryTitle) return;
+      // Process each major category
+      categories.forEach(categoryName => {
+        const categorySection = Array.from(document.querySelectorAll('.major-category-title'))
+          .find(el => el.textContent.includes(categoryName))
+          ?.closest('.major-category');
         
-        const categoryDiv = categoryTitle.closest('.category');
-        if (!categoryDiv) return;
+        if (!categorySection) return;
         
-        // Get all visible dots within this specific category
-        const categoryDots = Array.from(categoryDiv.querySelectorAll('.dot')).filter(dot => 
-          dot.style.display === 'block'
+        // Get all visible dots within this major category
+        const categoryDots = allDots.filter(dot => 
+          categorySection.contains(dot)
         );
         
-        // Draw lines only between dots in this category
+        // Draw lines between consecutive dots
         for (let i = 0; i < categoryDots.length - 1; i++) {
           const dot1 = categoryDots[i];
           const dot2 = categoryDots[i + 1];
