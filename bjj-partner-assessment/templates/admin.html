@@ -5,86 +5,446 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
             background-color: #f5f5f5;
         }
-        .archetype-editor {
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
+
+        .assessment-container {
+            background-color: white;
             border-radius: 8px;
-            background: white;
-            max-width: 800px;
+            padding: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .attribute-group {
-            margin: 15px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 4px;
-        }
-        .attribute-row {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-            padding: 5px;
-        }
-        .attribute-name {
-            width: 200px;
-            font-weight: 500;
-        }
-        .value-slider {
-            width: 200px;
-            margin: 0 10px;
-        }
-        .value-number {
-            width: 60px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
+
         .controls {
             margin: 20px 0;
-            padding: 10px;
-            background: #e9ecef;
-            border-radius: 4px;
-            display: flex;
-            gap: 10px;
+            text-align: center;
         }
+
         button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 4px;
-            background: #007bff;
+            background-color: #3498db;
             color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin: 0 5px;
             cursor: pointer;
         }
+
         button:hover {
-            background: #0056b3;
+            background-color: #2980b9;
         }
+
         select {
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #ddd;
-            margin-right: 10px;
+            width: 200px;
         }
+
         .metadata-section {
-            margin-top: 20px;
+            margin: 20px 0;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 4px;
         }
-        .metadata-section textarea {
+
+        .metadata-section input, .metadata-section textarea {
             width: 100%;
             margin: 5px 0;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+
+        .metadata-lists {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #444;
+            border-bottom: 2px solid #ddd;
+            padding: 0 20px 5px 20px;
+        }
+
+        .attribute {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 0 20px;
+        }
+
+        .attribute-name {
+            width: 30%;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .bar-container {
+            width: 35%;
+            position: relative;
+            height: 25px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .zone {
+            position: absolute;
+            height: 100%;
+            top: 0;
+        }
+
+        .zone-red {
+            left: 0;
+            width: 30%;
+            background-color: rgba(255, 99, 71, 0.3);
+        }
+
+        .zone-yellow {
+            left: 30%;
+            width: 40%;
+            background-color: rgba(255, 205, 86, 0.3);
+        }
+
+        .zone-green {
+            left: 70%;
+            width: 30%;
+            background-color: rgba(75, 192, 192, 0.3);
+        }
+
+        .bar {
+            position: absolute;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: #3498db;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .score-label {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: #333;
+            z-index: 2;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .jp-text {
+            width: 30%;
+            text-align: left;
+            padding-left: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Admin Panel</h1>
-    <p>If you can see this, the admin route is working!</p>
+    <div class="assessment-container">
+        <h1>Archetype Manager</h1>
+        
+        <div class="controls">
+            <select id="archetypeSelect">
+                <option value="">Select an archetype...</option>
+                <optgroup label="Archetypal Profiles">
+                    <option value="spazz">The Spazz</option>
+                    <option value="brute">The Brute</option>
+                    <option value="veteran">The Veteran</option>
+                    <option value="professor">The Professor</option>
+                    <option value="competitor">The Competitor</option>
+                </optgroup>
+            </select>
+            <button onclick="loadArchetype()">Load</button>
+            <button onclick="saveArchetype()">Save Changes</button>
+            <button onclick="createNewArchetype()">Create New</button>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <div class="metadata-section">
+            <h3>Archetype Details</h3>
+            <input type="text" id="archetypeName" placeholder="Display Name (e.g., The Spazz)">
+            <input type="text" id="archetypeImage" placeholder="Image filename (e.g., spazz.png)">
+            <textarea id="archetypeDescription" placeholder="Description" rows="3"></textarea>
+            <div class="metadata-lists">
+                <div>
+                    <h4>Strengths</h4>
+                    <textarea id="archetypeStrengths" placeholder="Enter strengths, one per line" rows="3"></textarea>
+                </div>
+                <div>
+                    <h4>Areas for Improvement</h4>
+                    <textarea id="archetypeImprovements" placeholder="Enter areas for improvement, one per line" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="assessmentData">
+            <!-- Partner Impact Section -->
+            <div class="major-category">
+                <div class="major-category-title">Partner Impact</div>
+                <p class="major-category-tagline">These influence how helpful you are to others as a training partner</p>
+                
+                <!-- Technical Attributes -->
+                <div class="category">
+                    <div class="category-title">Technical Attributes</div>
+                    <div id="technicalAttributes"></div>
+                </div>
+
+                <!-- Training Mindset -->
+                <div class="category">
+                    <div class="category-title">Training Mindset</div>
+                    <div id="mindsetAttributes"></div>
+                </div>
+
+                <!-- Hygiene -->
+                <div class="category">
+                    <div class="category-title">Hygiene</div>
+                    <div id="hygieneAttributes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const attributes = {
+            // Technical Attributes
+            technical: {
+                controlledMovements: "Controlled Movements",
+                controlledSubmissions: "Controlled Submissions",
+                modularIntensity: "Modular Intensity",
+                depthOfKnowledge: "Depth of Knowledge",
+                injuryKnowledge: "Injury Knowledge",
+                specificWork: "Specific Work"
+            },
+            // Training Mindset
+            mindset: {
+                controlledEgo: "Controlled Ego",
+                friendlyAttitude: "Friendly Attitude",
+                rdMindset: "R&D Mindset",
+                notOvertalking: "Not Overtalking",
+                communicative: "Communicative",
+                feedbackReceptivity: "Feedback Receptivity",
+                safetyConsciousness: "Safety Consciousness",
+                recoveryAwareness: "Recovery Awareness",
+                identifyWeaknesses: "Identify Weaknesses",
+                reliability: "Reliability"
+            },
+            // Hygiene
+            hygiene: {
+                personalCleanliness: "Personal Cleanliness",
+                nailCare: "Nail Care",
+                equipmentHygiene: "Equipment Hygiene",
+                dentalHygiene: "Dental Hygiene"
+            }
+        };
+
+        function createAttributeElement(id, name) {
+            return `
+                <div class="attribute">
+                    <div class="attribute-name">${name}</div>
+                    <div class="bar-container" onclick="handleBarClick(event, this)">
+                        <div class="zone zone-red"></div>
+                        <div class="zone zone-yellow"></div>
+                        <div class="zone zone-green"></div>
+                        <div class="bar" data-attribute="${id}" style="width: 50%"></div>
+                        <div class="score-label">5</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeAttributes() {
+            // Initialize Technical Attributes
+            const technicalContainer = document.getElementById('technicalAttributes');
+            Object.entries(attributes.technical).forEach(([id, name]) => {
+                technicalContainer.insertAdjacentHTML('beforeend', createAttributeElement(id, name));
+            });
+
+            // Initialize Mindset Attributes
+            const mindsetContainer = document.getElementById('mindsetAttributes');
+            Object.entries(attributes.mindset).forEach(([id, name]) => {
+                mindsetContainer.insertAdjacentHTML('beforeend', createAttributeElement(id, name));
+            });
+
+            // Initialize Hygiene Attributes
+            const hygieneContainer = document.getElementById('hygieneAttributes');
+            Object.entries(attributes.hygiene).forEach(([id, name]) => {
+                hygieneContainer.insertAdjacentHTML('beforeend', createAttributeElement(id, name));
+            });
+        }
+
+        function handleBarClick(event, container) {
+            const rect = container.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const value = Math.round((x / rect.width) * 10);
+            const clampedValue = Math.max(0, Math.min(10, value));
+            
+            const bar = container.querySelector('.bar');
+            const label = container.querySelector('.score-label');
+            
+            bar.style.width = `${(clampedValue / 10) * 100}%`;
+            label.textContent = clampedValue;
+        }
+
+        async function loadArchetype() {
+            const select = document.getElementById('archetypeSelect');
+            const archetypeName = select.value;
+            
+            if (!archetypeName) {
+                showMessage('Please select an archetype', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/admin/archetypes/${archetypeName}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Update metadata
+                    document.getElementById('archetypeName').value = archetypeName;
+                    document.getElementById('archetypeDescription').value = data.metadata?.description || '';
+                    document.getElementById('archetypeStrengths').value = (data.metadata?.strengths || []).join('\n');
+                    document.getElementById('archetypeImprovements').value = (data.metadata?.areas_for_improvement || []).join('\n');
+                    
+                    // Update all attribute values
+                    Object.entries(data).forEach(([attr, value]) => {
+                        if (attr !== 'metadata') {  // Skip metadata object
+                            const bar = document.querySelector(`[data-attribute="${attr}"]`);
+                            if (bar) {
+                                bar.style.width = `${(value / 10) * 100}%`;
+                                bar.parentElement.querySelector('.score-label').textContent = value;
+                            }
+                        }
+                    });
+                    
+                    showMessage('Archetype loaded successfully!', true);
+                } else {
+                    showMessage('Error loading archetype: ' + data.error, false);
+                }
+            } catch (error) {
+                showMessage('Error loading archetype: ' + error.message, false);
+            }
+        }
+
+        async function saveArchetype() {
+            const select = document.getElementById('archetypeSelect');
+            const archetypeName = select.value;
+            
+            if (!archetypeName) {
+                showMessage('Please select an archetype', false);
+                return;
+            }
+
+            const attributes = {};
+            document.querySelectorAll('.bar').forEach(bar => {
+                const value = parseInt(bar.parentElement.querySelector('.score-label').textContent);
+                attributes[bar.dataset.attribute] = value;
+            });
+            
+            // Add metadata
+            attributes.metadata = {
+                description: document.getElementById('archetypeDescription').value,
+                strengths: document.getElementById('archetypeStrengths').value.split('\n').filter(s => s.trim()),
+                areas_for_improvement: document.getElementById('archetypeImprovements').value.split('\n').filter(s => s.trim())
+            };
+            
+            try {
+                const response = await fetch(`/api/admin/archetypes/${archetypeName}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(attributes)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('Archetype saved successfully!', true);
+                } else {
+                    showMessage('Error saving archetype: ' + result.error, false);
+                }
+            } catch (error) {
+                showMessage('Error saving archetype: ' + error.message, false);
+            }
+        }
+
+        function createNewArchetype() {
+            const name = prompt('Enter new archetype ID (e.g., "gentle-giant"):');
+            if (name) {
+                const select = document.getElementById('archetypeSelect');
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.querySelector('optgroup').appendChild(option);
+                select.value = name;
+                
+                // Reset all inputs
+                document.querySelectorAll('.bar').forEach(bar => {
+                    bar.style.width = '50%';
+                    bar.parentElement.querySelector('.score-label').textContent = '5';
+                });
+                
+                document.getElementById('archetypeName').value = '';
+                document.getElementById('archetypeDescription').value = '';
+                document.getElementById('archetypeStrengths').value = '';
+                document.getElementById('archetypeImprovements').value = '';
+            }
+        }
+
+        function showMessage(message, isSuccess) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (isSuccess) {
+                successMsg.textContent = message;
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                setTimeout(() => successMsg.style.display = 'none', 3000);
+            } else {
+                errorMsg.textContent = message;
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+            }
+        }
+
+        // Initialize the interface
+        initializeAttributes();
+    </script>
 </body>
 </html>

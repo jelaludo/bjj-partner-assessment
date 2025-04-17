@@ -10,6 +10,9 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+# Enable admin mode for development
+os.environ['ADMIN_MODE'] = 'true'
+
 app = Flask(__name__, static_folder='images', static_url_path='/images')
 
 # Admin access control
@@ -239,16 +242,24 @@ def get_archetype(archetype_name):
         return jsonify({"error": "Archetype not found"}), 404
     return jsonify(archetypes[archetype_name])
 
-@app.route('/api/admin/archetypes/<archetype_name>', methods=['POST'])
+@app.route('/api/admin/archetypes/<archetype_name>', methods=['GET', 'PUT', 'POST'])
 @admin_required
-def admin_update_archetype(archetype_name):
+def admin_archetype(archetype_name):
     try:
-        data = request.json
         archetypes = load_archetypal_profiles()
-        archetypes[archetype_name] = data
-        save_archetypes(archetypes)
-        clear_caches()
-        return jsonify({"status": "success"})
+        
+        if request.method == 'GET':
+            if archetype_name not in archetypes:
+                return jsonify({"error": "Archetype not found"}), 404
+            return jsonify(archetypes[archetype_name])
+            
+        elif request.method in ['PUT', 'POST']:
+            data = request.json
+            archetypes[archetype_name] = data
+            save_archetypes(archetypes)
+            clear_caches()
+            return jsonify({"status": "success"})
+            
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
