@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "language": "en",
+  "tooltips": {
+    "controlled_movements": {
+      "main": "How controlled and smooth your movements are during training",
+      "why": "Prevents accidental injuries and builds trust with training partners",
+      "tips": [
+        "Start techniques slowly and build up speed",
+        "Focus on smooth transitions",
+        "Ask partner for feedback on pressure"
+      ]
+    },
+    "controlled_submissions": {
+      "main": "How well you control the pace and pressure of submissions",
+      "why": "Ensures partner safety and builds trust",
+      "tips": [
+        "Apply submissions gradually",
+        "Release immediately when partner taps",
+        "Communicate about intensity"
+      ]
+    },
+    "personal_cleanliness": {
+      "main": "Overall hygiene and cleanliness before and during training",
+      "why": "Prevents skin infections and shows respect for training partners",
+      "tips": [
+        "Shower before training",
+        "Use deodorant",
+        "Keep hair clean and controlled"
+      ]
+    }
+  }
+}

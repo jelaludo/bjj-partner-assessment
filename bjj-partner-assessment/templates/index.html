@@ -649,6 +649,50 @@
                     </div>
                 </div>
             </div>
+
+            <!-- New Hygiene section -->
+            <div class="category">
+                <div class="category-title">Hygiene</div>
+                
+                <div class="attribute" data-tooltip="Body odor, Clean Feet, Showering Habits, Dental Hygiene">
+                    <div class="attribute-name">Personal Cleanliness</div>
+                    <div class="bar-container" onclick="handleBarClick(event, this)">
+                        <div class="zone zone-red"></div>
+                        <div class="zone zone-yellow"></div>
+                        <div class="zone zone-green"></div>
+                        <div class="bar" data-attribute="personalCleanliness" style="width: 0%"></div>
+                        <div class="score-label">0</div>
+                        <div class="dot" style="display: none;"></div>
+                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="attribute" data-tooltip="Trimmed nails to avoid scratches and cuts, and painful inverted nail injuries">
+                    <div class="attribute-name">Nail Care</div>
+                    <div class="bar-container" onclick="handleBarClick(event, this)">
+                        <div class="zone zone-red"></div>
+                        <div class="zone zone-yellow"></div>
+                        <div class="zone zone-green"></div>
+                        <div class="bar" data-attribute="nailCare" style="width: 0%"></div>
+                        <div class="score-label">0</div>
+                        <div class="dot" style="display: none;"></div>
+                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="attribute" data-tooltip="Clean gi and rashguard to prevent infections like ringworm or staph">
+                    <div class="attribute-name">Equipment Hygiene</div>
+                    <div class="bar-container" onclick="handleBarClick(event, this)">
+                        <div class="zone zone-red"></div>
+                        <div class="zone zone-yellow"></div>
+                        <div class="zone zone-green"></div>
+                        <div class="bar" data-attribute="equipmentHygiene" style="width: 0%"></div>
+                        <div class="score-label">0</div>
+                        <div class="dot" style="display: none;"></div>
+                        <input type="number" class="edit-input" min="0" max="10" style="display: none;">
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Individual Performance Section -->

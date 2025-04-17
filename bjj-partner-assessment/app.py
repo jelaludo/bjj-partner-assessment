@@ -8,20 +8,54 @@ import random
 
 app = Flask(__name__)
 
-# Add this function to ensure data directory exists
-def ensure_data_directory():
-    data_dir = Path('data')
-    data_dir.mkdir(exist_ok=True)
-    return data_dir
+# File paths
+CONFIG_DIR = Path('config')
+DATA_DIR = Path('data')
+ATTRIBUTES_FILE = CONFIG_DIR / 'attributes.json'
+TOOLTIPS_DIR = CONFIG_DIR / 'tooltips'
+PROFILES_FILE = DATA_DIR / 'profiles.json'
+ARCHETYPES_FILE = DATA_DIR / 'archetypal_profiles.json'
 
-# Update the file paths to use the data directory
-PROFILES_FILE = Path('data/profiles.json')
-ARCHETYPES_FILE = Path('data/archetypal_profiles.json')
+def ensure_directories():
+    """Ensure all required directories exist"""
+    DATA_DIR.mkdir(exist_ok=True)
+    CONFIG_DIR.mkdir(exist_ok=True)
+    TOOLTIPS_DIR.mkdir(exist_ok=True)
+    return DATA_DIR, CONFIG_DIR
+
+@lru_cache()
+def load_attributes_config():
+    """Load the attributes configuration"""
+    if not ATTRIBUTES_FILE.exists():
+        return {}
+    with open(ATTRIBUTES_FILE, 'r') as f:
+        return json.load(f)
+
+@lru_cache()
+def load_tooltips(lang='en'):
+    """Load tooltips for specified language"""
+    tooltip_file = TOOLTIPS_DIR / f'{lang}.json'
+    if not tooltip_file.exists():
+        return {}
+    with open(tooltip_file, 'r') as f:
+        return json.load(f)
+
+def get_default_values():
+    """Get default values for all attributes from config"""
+    config = load_attributes_config()
+    default_values = {}
+    
+    for category in config.get('categories', {}).values():
+        for section in category.get('sections', {}).values():
+            for attr_id, attr in section.get('attributes', {}).items():
+                default_values[attr_id] = attr.get('default_value', 5)
+    
+    return default_values
 
 # Cache for profiles
 @lru_cache()
 def load_profiles():
-    ensure_data_directory()
+    ensure_directories()
     if not PROFILES_FILE.exists():
         return {}
     with open(PROFILES_FILE, 'r') as f:
@@ -89,7 +123,7 @@ def generate_archetype_values(high=None, low=None):
 # Modify the load_archetypal_profiles function
 @lru_cache()
 def load_archetypal_profiles():
-    ensure_data_directory()
+    ensure_directories()
     print("\n=== Debug: Loading Archetypes ===")
     print(f"Checking file: {ARCHETYPES_FILE}")
     print(f"File exists: {ARCHETYPES_FILE.exists()}")
@@ -109,7 +143,7 @@ def load_archetypal_profiles():
 
 # Save profiles to JSON file
 def save_profiles(profiles_data):
-    ensure_data_directory()
+    ensure_directories()
     try:
         # Create a temporary file first
         temp_file = PROFILES_FILE.with_suffix('.tmp')
@@ -122,13 +156,15 @@ def save_profiles(profiles_data):
         print(f"Error saving profiles: {str(e)}")
         raise
 
-# Add this function to clear the cache
+# Update clear_caches to include new functions
 def clear_caches():
     load_profiles.cache_clear()
     load_archetypal_profiles.cache_clear()
+    load_attributes_config.cache_clear()
+    load_tooltips.cache_clear()
 
 def save_archetypes(archetypes_data):
-    ensure_data_directory()
+    ensure_directories()
     try:
         # Create a temporary file first
         temp_file = ARCHETYPES_FILE.with_suffix('.tmp')
@@ -167,53 +203,17 @@ def create_profile():
         if profile_name in profiles:
             return jsonify({"error": "Profile already exists"}), 409
 
-        # If based on an archetype
         if 'archetype' in data:
             archetypes = load_archetypal_profiles()
             archetype_name = data['archetype']
             if archetype_name in archetypes:
-                # Create new profile based on archetype
                 profiles[profile_name] = archetypes[archetype_name].copy()
-                # Remove metadata if it exists
                 profiles[profile_name].pop('metadata', None)
             else:
                 return jsonify({"error": "Archetype not found"}), 404
         else:
-            # Create empty profile with default values
-            profiles[profile_name] = {
-                # Technical Attributes
-                "controlledMovements": 5,
-                "controlledSubmissions": 5,
-                "modularIntensity": 5,
-                "depthOfKnowledge": 5,
-                "injuryKnowledge": 5,
-                "specificWork": 5,
-                
-                # Mindset
-                "controlledEgo": 5,
-                "friendlyAttitude": 5,
-                "rdMindset": 5,
-                "notOvertalking": 5,
-                "communicative": 5,
-                "feedbackReceptivity": 5,
-                "safetyConsciousness": 5,
-                "recoveryAwareness": 5,
-                "identifyWeaknesses": 5,
-                "reliability": 5,
-                
-                # Physical Attributes
-                "strength": 5,
-                "gripStrength": 5,
-                "flexibility": 5,
-                "mobility": 5,
-                "weight": 5,
-                "cardio": 5,
-                "explosiveness": 5,
-                "coordination": 5,
-                "reactionTime": 5,
-                "constitution": 5,
-                "hygiene": 5
-            }
+            # Create empty profile with default values from config
+            profiles[profile_name] = get_default_values()
 
         save_profiles(profiles)
         return jsonify(profiles[profile_name])
@@ -279,6 +279,15 @@ def update_profile(profile_name):
     except Exception as e:
         print(f"Error updating profile: {str(e)}")  # Server-side logging
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/config')
+def get_config():
+    """Get full configuration including attributes and tooltips"""
+    lang = request.args.get('lang', 'en')
+    return jsonify({
+        'attributes': load_attributes_config(),
+        'tooltips': load_tooltips(lang)
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)
