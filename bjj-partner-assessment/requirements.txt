@@ -1,2 +1,8 @@
 flask==2.3.3
 python-dotenv==1.0.0  # for environment variable management
+gunicorn==21.2.0  # production WSGI server
+Werkzeug==3.0.1  # Flask dependency
+click>=8.0.0  # Required by Flask
+itsdangerous>=2.0  # Required by Flask
+Jinja2>=3.0  # Required by Flask
+MarkupSafe>=2.0  # Required by Jinja2
