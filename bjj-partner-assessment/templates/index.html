@@ -500,6 +500,113 @@
         object-fit: contain;
         display: none;
     }
+
+    /* Mobile optimizations */
+    @media screen and (max-width: 768px) {
+        body {
+            padding: 8px;
+            max-width: 100%;
+        }
+
+        .assessment-container {
+            padding: 10px;
+        }
+
+        /* Maintain horizontal layout but reduce sizes */
+        .attribute {
+            padding: 0 5px;
+            margin-bottom: 8px;
+            min-height: 30px;
+        }
+
+        .attribute-name {
+            width: 30%;
+            font-size: 0.8em;
+            padding-right: 5px;
+        }
+
+        .bar-container {
+            width: 35%;
+            height: 20px;
+            margin: 0 5px;
+        }
+
+        .jp-text {
+            width: 30%;
+            font-size: 0.8em;
+            padding-left: 5px;
+        }
+
+        /* Make buttons more touch-friendly */
+        button {
+            padding: 12px 24px;
+            margin: 8px;
+            font-size: 1em;
+            min-width: 80px;
+        }
+
+        select {
+            padding: 12px;
+            font-size: 1em;
+            width: 80%;
+            max-width: none;
+        }
+
+        /* Reduce title sizes */
+        .main-title {
+            font-size: 1.5em;
+            margin-bottom: 2px;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        /* Tighten category spacing */
+        .category {
+            margin-bottom: 15px;
+        }
+
+        .category-title {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            padding: 0 5px 3px 5px;
+        }
+
+        /* Adjust score display */
+        .score-label {
+            font-size: 0.8em;
+            right: 3px;
+        }
+
+        /* Make dots and lines smaller */
+        .dot {
+            width: 8px;
+            height: 8px;
+            bottom: -4px;
+        }
+
+        .connector-line {
+            height: 1px;
+        }
+
+        /* Tighten legend */
+        .legend {
+            margin: 8px 0;
+        }
+
+        .legend-item {
+            font-size: 0.7em;
+            margin: 0 5px;
+        }
+
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            margin-right: 3px;
+        }
+    }
   </style>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>

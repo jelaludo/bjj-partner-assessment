@@ -188,6 +188,104 @@
             transition: opacity 0.3s ease;
             display: none;
         }
+
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 8px;
+                max-width: 100%;
+            }
+
+            .assessment-container {
+                padding: 10px;
+            }
+
+            .attribute {
+                padding: 0 5px;
+                margin-bottom: 8px;
+                min-height: 30px;
+            }
+
+            .attribute-name {
+                width: 30%;
+                font-size: 0.8em;
+                padding-right: 5px;
+            }
+
+            .bar-container {
+                width: 35%;
+                height: 20px;
+                margin: 0 5px;
+            }
+
+            .jp-text {
+                width: 30%;
+                font-size: 0.8em;
+                padding-left: 5px;
+            }
+
+            button {
+                padding: 12px 24px;
+                margin: 8px;
+                font-size: 1em;
+                min-width: 80px;
+            }
+
+            select {
+                padding: 12px;
+                font-size: 1em;
+                width: 80%;
+                max-width: none;
+            }
+
+            .metadata-section {
+                padding: 10px;
+            }
+
+            .metadata-section input, 
+            .metadata-section textarea {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+
+            .metadata-lists {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .image-container {
+                min-height: 200px;
+            }
+
+            .archetype-image {
+                height: 200px;
+            }
+
+            .error-message,
+            .success-message {
+                font-size: 0.9em;
+                padding: 8px;
+            }
+
+            .category {
+                margin-bottom: 15px;
+            }
+
+            .category-title {
+                font-size: 0.9em;
+                margin-bottom: 5px;
+                padding: 0 5px 3px 5px;
+            }
+
+            .score-label {
+                font-size: 0.8em;
+                right: 3px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin: 10px 0;
+            }
+        }
     </style>
 </head>
 <body>
