@@ -485,6 +485,21 @@
         text-align: center;
         margin-bottom: 20px;
     }
+    .archetype-image-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        min-height: 200px;
+    }
+
+    .archetype-image {
+        max-width: 100%;
+        max-height: 300px;
+        object-fit: contain;
+        display: none;
+    }
   </style>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
@@ -509,21 +524,9 @@
         <option value="self">Self Assessment</option>
         <option value="partner1">Training Partner 1</option>
         <option value="partner2">Training Partner 2</option>
-            <optgroup label="Archetypal Profiles">
-              <option value="archetype:spazz">The Spazz</option>
-              <option value="archetype:brute">The Brute/Gorilla</option>
-              <option value="archetype:veteran">The Frail Old Guy/Veteran</option>
-              <option value="archetype:professor">The Professor/Instructor</option>
-              <option value="archetype:competitor">The Competitor</option>
-              <option value="archetype:stinky_troll">The Stinky Troll</option>
-              <option value="archetype:chess_player">The Chess Player</option>
-              <option value="archetype:natural_athlete">The Natural Athlete</option>
-              <option value="archetype:hobbyist">The Hobbyist</option>
-              <option value="archetype:flaky_talent">The Flaky Talent</option>
-              <option value="archetype:injury_collector">The Injury Collector</option>
-              <option value="archetype:one_trick_pony">The One-Trick Pony</option>
-              <option value="archetype:gear_obsessive">The Gear Obsessive</option>
-            </optgroup>
+        <optgroup label="Archetypal Profiles">
+            <!-- Options will be loaded dynamically -->
+        </optgroup>
       </select>
     </div>
     
@@ -534,6 +537,10 @@
         <div id="strengths"></div>
         <div id="improvements"></div>
       </div>
+    </div>
+    
+    <div class="archetype-image-container">
+        <img class="archetype-image" id="archetypeImage" alt="">
     </div>
     
     <div id="patternContainer">
@@ -1157,12 +1164,14 @@
       try {
         let response;
         let archetypeName = '';
+        const archetypeImage = document.getElementById('archetypeImage');
         
         if (profileId.startsWith('archetype:')) {
           archetypeName = profileId.split(':')[1];
           response = await fetch(`/api/archetypes/${archetypeName}`);
         } else {
           response = await fetch(`/api/profiles/${profileId}`);
+          if (archetypeImage) archetypeImage.style.display = 'none';
         }
 
         if (!response.ok) {
@@ -1175,26 +1184,30 @@
         // Update the display
         updateBars(data);
         
-        // Fix: Use the correct function name and add timeout
         setTimeout(drawConnectorLines, 600); // Wait for animations to complete
 
-        // Show archetype info if it exists
+        // Show archetype info and image if they exist
         const archetypeInfo = document.getElementById('archetypeInfo');
         if (data.metadata && archetypeInfo) {
-          archetypeInfo.style.display = 'block';
-          if (archetypeName) {
-            document.getElementById('archetypeName').textContent = 
-              archetypeName.split('_')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-          }
-          document.getElementById('archetypeDescription').textContent = data.metadata.description;
+            archetypeInfo.style.display = 'block';
+            if (archetypeName) {
+                document.getElementById('archetypeName').textContent = archetypeName;
+            }
+            document.getElementById('archetypeDescription').textContent = data.metadata.description || '';
+            
+            // Handle image display
+            if (archetypeImage) {
+                if (data.metadata && data.metadata.image) {
+                    archetypeImage.src = `/images/${data.metadata.image}`;
+                    archetypeImage.style.display = 'block';
+                } else {
+                    archetypeImage.style.display = 'none';
+                }
+            }
         } else if (archetypeInfo) {
-          archetypeInfo.style.display = 'none';
+            archetypeInfo.style.display = 'none';
+            if (archetypeImage) archetypeImage.style.display = 'none';
         }
-
-        // Add this function to update the image when profile changes
-        updateArchetypeImage(profileId);
       } catch (error) {
         console.error('Error loading profile:', error);
         alert('Error loading profile: ' + error.message);
@@ -1278,6 +1291,7 @@
     
     // Initial load
     window.addEventListener('DOMContentLoaded', function() {
+      populateArchetypes();
       const initialProfile = document.getElementById('personSelect').value;
       loadProfile(initialProfile);
     });
@@ -1562,95 +1576,25 @@
         }
     });
 
-    // Add this function to update the image when profile changes
-    function updateArchetypeImage(profileId) {
-        const imageElement = document.getElementById('archetype-image');
-        if (profileId.startsWith('archetype:')) {
-            const archetypeName = profileId.split(':')[1].toLowerCase();
-            // Map the archetype name to the corresponding image file
-            const imageMap = {
-                'spazz': 'PTP_TheSpaz_256x.png',
-                'brute': 'PTP_TheBrute256x.png',
-                'injury_collector': 'PTP_ChimpInjuryCollector256x.png',
-                'stinky_troll': 'PTP_StinkyTroll256x.png'
-            };
-            const imageName = imageMap[archetypeName];
-            if (imageName) {
-                imageElement.src = `images/${imageName}`;
-                imageElement.style.display = 'block';
-                imageElement.style.opacity = '1';
-                console.log('Updated image:', imageName); // Debug log
-            } else {
-                console.log('No image found for archetype:', archetypeName); // Debug log
-                imageElement.style.opacity = '0';
-                setTimeout(() => {
-                    imageElement.style.display = 'none';
-                }, 300);
-            }
-        } else {
-            console.log('Not an archetype profile:', profileId); // Debug log
-            imageElement.style.opacity = '0';
-            setTimeout(() => {
-                imageElement.style.display = 'none';
-            }, 300);
+    // Function to populate archetypes in the dropdown
+    async function populateArchetypes() {
+        try {
+            const response = await fetch('/api/archetypes');
+            const archetypes = await response.json();
+            
+            const select = document.getElementById('personSelect');
+            
+            // Add archetype options
+            Object.keys(archetypes).forEach(archetypeName => {
+                const option = document.createElement('option');
+                option.value = `archetype:${archetypeName}`;
+                option.textContent = archetypeName; // Use exact name from JSON
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error loading archetypes:', error);
         }
     }
-
-    // Add these functions to your existing JavaScript section
-    function saveToLocalStorage(profileId, values) {
-        const key = `saved_profile_${profileId}`;
-        localStorage.setItem(key, JSON.stringify(values));
-    }
-
-    function loadFromLocalStorage(profileId) {
-        const key = `saved_profile_${profileId}`;
-        const saved = localStorage.getItem(key);
-        return saved ? JSON.parse(saved) : null;
-    }
-
-    function exportAsImage() {
-        // Create a temporary canvas element
-        const element = document.querySelector('.assessment-container');
-        html2canvas(element).then(canvas => {
-            // Create download link
-            const link = document.createElement('a');
-            link.download = 'bjj-assessment.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-    }
-
-    function exportProfile() {
-        const values = currentValues; // Use your existing currentValues object
-        const blob = new Blob([JSON.stringify(values, null, 2)], {type: 'application/json'});
-        const link = document.createElement('a');
-        link.download = 'bjj-profile.json';
-        link.href = URL.createObjectURL(blob);
-        link.click();
-    }
-
-    function importProfile(file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const values = JSON.parse(e.target.result);
-            updateBars(values);
-            saveToLocalStorage('custom', values);
-        };
-        reader.readAsText(file);
-    }
-
-    // Add this to your HTML where you want the export/import buttons
-    const exportControls = `
-        <div class="export-controls">
-            <button onclick="exportAsImage()">Save as Image</button>
-            <button onclick="exportProfile()">Export Profile</button>
-            <input type="file" id="importFile" accept=".json" style="display: none" 
-                   onchange="importProfile(this.files[0])">
-            <button onclick="document.getElementById('importFile').click()">
-                Import Profile
-            </button>
-        </div>
-    `;
   </script>
 </body>
 </html>

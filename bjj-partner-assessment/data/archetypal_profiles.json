@@ -16,17 +16,10 @@
         "recoveryAwareness": 3,
         "identifyWeaknesses": 3,
         "reliability": 6,
-        "strength": 6,
-        "gripStrength": 4,
-        "flexibility": 5,
-        "mobility": 5,
-        "weight": 5,
-        "cardio": 4,
-        "explosiveness": 8,
-        "coordination": 3,
-        "reactionTime": 4,
-        "constitution": 5,
-        "hygiene": 6,
+        "personalCleanliness": 8,
+        "nailCare": 3,
+        "equipmentHygiene": 9,
+        "dentalHygiene": 7,
         "metadata": {
             "description": "High intensity, low control partner, typically a newer white belt",
             "strengths": [
@@ -36,7 +29,8 @@
             "areas_for_improvement": [
                 "Control",
                 "Technical knowledge"
-            ]
+            ],
+            "image": "PTP_TheSpaz_256x.png"
         }
     },
     "brute": {
@@ -56,17 +50,10 @@
         "recoveryAwareness": 1,
         "identifyWeaknesses": 1,
         "reliability": 7,
-        "strength": 9,
-        "gripStrength": 9,
-        "flexibility": 3,
-        "mobility": 4,
-        "weight": 9,
-        "cardio": 6,
-        "explosiveness": 8,
-        "coordination": 3,
-        "reactionTime": 5,
-        "constitution": 9,
-        "hygiene": 6,
+        "personalCleanliness": 5,
+        "nailCare": 5,
+        "equipmentHygiene": 5,
+        "dentalHygiene": 5,
         "metadata": {
             "description": "Strength-reliant partner with a winning mindset",
             "strengths": [
@@ -76,7 +63,8 @@
             "areas_for_improvement": [
                 "Technical finesse",
                 "Control"
-            ]
+            ],
+            "image": "PTP_TheBrute256x.png"
         }
     },
     "veteran": {
@@ -187,7 +175,126 @@
             "areas_for_improvement": [
                 "Versatility",
                 "Teaching others"
-            ]
+            ],
+            "image": "PTP_TheCompetitor256x.png"
+        }
+    },
+    "The Stinky Troll": {
+        "controlledMovements": 5,
+        "controlledSubmissions": 4,
+        "modularIntensity": 4,
+        "depthOfKnowledge": 3,
+        "injuryKnowledge": 2,
+        "specificWork": 4,
+        "controlledEgo": 4,
+        "friendlyAttitude": 3,
+        "rdMindset": 4,
+        "notOvertalking": 8,
+        "communicative": 3,
+        "feedbackReceptivity": 2,
+        "safetyConsciousness": 2,
+        "recoveryAwareness": 3,
+        "identifyWeaknesses": 2,
+        "reliability": 2,
+        "personalCleanliness": 1,
+        "nailCare": 0,
+        "equipmentHygiene": 1,
+        "dentalHygiene": 1,
+        "metadata": {
+            "description": "Grappling is already so intimate and sweaty, why make it worse?",
+            "strengths": [],
+            "areas_for_improvement": [
+                "Get your life together."
+            ],
+            "image": "PTP_StinkyTroll256x.png"
+        }
+    },
+    "The Injury Collector": {
+        "controlledMovements": 2,
+        "controlledSubmissions": 5,
+        "modularIntensity": 4,
+        "depthOfKnowledge": 4,
+        "injuryKnowledge": 1,
+        "specificWork": 5,
+        "controlledEgo": 5,
+        "friendlyAttitude": 5,
+        "rdMindset": 5,
+        "notOvertalking": 5,
+        "communicative": 5,
+        "feedbackReceptivity": 5,
+        "safetyConsciousness": 1,
+        "recoveryAwareness": 1,
+        "identifyWeaknesses": 5,
+        "reliability": 5,
+        "personalCleanliness": 6,
+        "nailCare": 6,
+        "equipmentHygiene": 6,
+        "dentalHygiene": 6,
+        "metadata": {
+            "description": "",
+            "strengths": [],
+            "areas_for_improvement": [],
+            "image": "PTP_ChimpInjuryCollector256x.png"
+        }
+    },
+    "Influencer Blue Belt": {
+        "controlledMovements": 3,
+        "controlledSubmissions": 2,
+        "modularIntensity": 3,
+        "depthOfKnowledge": 1,
+        "injuryKnowledge": 1,
+        "specificWork": 2,
+        "controlledEgo": 1,
+        "friendlyAttitude": 9,
+        "rdMindset": 1,
+        "notOvertalking": 1,
+        "communicative": 8,
+        "feedbackReceptivity": 2,
+        "safetyConsciousness": 3,
+        "recoveryAwareness": 2,
+        "identifyWeaknesses": 1,
+        "reliability": 2,
+        "personalCleanliness": 10,
+        "nailCare": 10,
+        "equipmentHygiene": 10,
+        "dentalHygiene": 10,
+        "metadata": {
+            "description": "",
+            "strengths": [],
+            "areas_for_improvement": [],
+            "image": "PTP_IGBlueBelt256x.png"
+        }
+    },
+    "Gandalf the White Belt": {
+        "controlledMovements": 1,
+        "controlledSubmissions": 1,
+        "modularIntensity": 1,
+        "depthOfKnowledge": 1,
+        "injuryKnowledge": 1,
+        "specificWork": 1,
+        "controlledEgo": 9,
+        "friendlyAttitude": 9,
+        "rdMindset": 8,
+        "notOvertalking": 1,
+        "communicative": 8,
+        "feedbackReceptivity": 5,
+        "safetyConsciousness": 3,
+        "recoveryAwareness": 2,
+        "identifyWeaknesses": 8,
+        "reliability": 8,
+        "personalCleanliness": 7,
+        "nailCare": 5,
+        "equipmentHygiene": 3,
+        "dentalHygiene": 5,
+        "metadata": {
+            "description": "It's never too late for a new journey",
+            "strengths": [
+                "History, Magic, Pipes"
+            ],
+            "areas_for_improvement": [
+                "Grappling"
+            ],
+            "image": "PTP_GandalfTheWhiteBelt256x.png"
         }
     }
 }

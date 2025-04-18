@@ -171,6 +171,23 @@
             text-align: left;
             padding-left: 20px;
         }
+
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .archetype-image {
+            width: auto;
+            height: 350px;
+            margin: 0 20px;
+            transition: opacity 0.3s ease;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -191,6 +208,10 @@
             <button onclick="loadArchetype()">Load</button>
             <button onclick="saveArchetype()">Save Changes</button>
             <button onclick="createNewArchetype()">Create New</button>
+        </div>
+
+        <div class="image-container">
+            <img id="archetype-image" class="archetype-image" alt="Archetype Image">
         </div>
 
         <div id="errorMessage" class="error-message"></div>
@@ -341,9 +362,36 @@
                     document.getElementById('archetypeStrengths').value = (data.metadata?.strengths || []).join('\n');
                     document.getElementById('archetypeImprovements').value = (data.metadata?.areas_for_improvement || []).join('\n');
                     
+                    // Update image from metadata
+                    const imageElement = document.getElementById('archetype-image');
+                    const imageInput = document.getElementById('archetypeImage');
+                    
+                    if (data.metadata?.image) {
+                        imageInput.value = data.metadata.image;
+                        imageElement.src = `/images/${data.metadata.image}`;
+                        imageElement.style.display = 'block';
+                    } else {
+                        // Default image names based on archetype
+                        let defaultImage;
+                        if (archetypeName === 'spazz') {
+                            defaultImage = 'PTP_TheSpaz_256x.png';
+                        } else if (archetypeName === 'brute') {
+                            defaultImage = 'PTP_TheBrute256x.png';
+                        }
+                        
+                        if (defaultImage) {
+                            imageInput.value = defaultImage;
+                            imageElement.src = `/images/${defaultImage}`;
+                            imageElement.style.display = 'block';
+                        } else {
+                            imageInput.value = '';
+                            imageElement.style.display = 'none';
+                        }
+                    }
+                    
                     // Update all attribute values
                     Object.entries(data).forEach(([attr, value]) => {
-                        if (attr !== 'metadata') {  // Skip metadata object
+                        if (attr !== 'metadata') {
                             const bar = document.querySelector(`[data-attribute="${attr}"]`);
                             if (bar) {
                                 bar.style.width = `${(value / 10) * 100}%`;
@@ -376,11 +424,12 @@
                 attributes[bar.dataset.attribute] = value;
             });
             
-            // Add metadata
+            // Add metadata including the image filename
             attributes.metadata = {
                 description: document.getElementById('archetypeDescription').value,
                 strengths: document.getElementById('archetypeStrengths').value.split('\n').filter(s => s.trim()),
-                areas_for_improvement: document.getElementById('archetypeImprovements').value.split('\n').filter(s => s.trim())
+                areas_for_improvement: document.getElementById('archetypeImprovements').value.split('\n').filter(s => s.trim()),
+                image: document.getElementById('archetypeImage').value
             };
             
             try {
@@ -443,8 +492,38 @@
             }
         }
 
-        // Initialize the interface
-        initializeAttributes();
+        // Add an event listener for the image filename input
+        document.getElementById('archetypeImage').addEventListener('change', function() {
+            const imageElement = document.getElementById('archetype-image');
+            imageElement.src = `/images/${this.value}`;
+        });
+
+        async function populateArchetypeSelect() {
+            try {
+                const response = await fetch('/api/archetypes');
+                const archetypes = await response.json();
+                
+                const select = document.getElementById('archetypeSelect');
+                const optgroup = select.querySelector('optgroup');
+                optgroup.innerHTML = ''; // Clear existing options
+                
+                // Add archetype options using exact names from JSON
+                Object.keys(archetypes).forEach(archetypeName => {
+                    const option = document.createElement('option');
+                    option.value = archetypeName;
+                    option.textContent = archetypeName;
+                    optgroup.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading archetypes:', error);
+            }
+        }
+
+        // Call this when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            populateArchetypeSelect();
+            initializeAttributes();
+        });
     </script>
 </body>
 </html>
